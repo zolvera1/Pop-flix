@@ -1,0 +1,131 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+  
+.center{
+  text-align: center;
+}
+.contanier{
+ 
+  display: inline-block;
+  
+}
+
+  #searchjs {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    width: 300px;
+    border-radius: 5px;
+  }
+  
+  .no-suggestions {
+    position: fixed;
+    color: rgb(236, 2, 2);
+    padding: .5rem;
+  }
+  
+  .suggestions {
+   position: fixed;
+    border-top-width: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    list-style: none;
+    margin-top: 0;
+    max-height: 303px;
+    overflow-y: auto;
+    padding-left: 0px;
+    margin-left: 5px;
+    width: calc(290px + 1rem);
+  }::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+  
+  .suggestions li {
+    padding: 0.7rem;
+    background-color: #153046;
+    color: rgb(175, 194, 211);
+    font-weight: 700;
+  }
+  
+  .suggestion-active,
+  .suggestions li:hover {
+    background-color: #12728fea;
+    color: #1bceee;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  
+  .suggestions li:not(:last-of-type) {
+    border-bottom: 1px solid rgb(33, 70, 87);
+  }
+
+  #search-btn{
+    position: fixed;
+  margin-left: 20px;
+
+  }
+
+  .btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 12px;
+    margin-bottom: 0;
+
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+}
+.btn:focus,
+.btn:active:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus {
+    
+    text-decoration: none;
+}
+.btn:active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+
+/* default
+---------------------------- */
+.btn-default {
+    color: rgb(240, 240, 240);
+    background-color: rgb(34, 194, 48);
+    border-color: #ccc;
+    border: 0;
+    border-radius: 5px;
+}
+.btn-default:focus {
+   
+    background-color: rgb(36, 182, 48);
+    border-color: #8c8c8c;
+}
+.btn-default:hover {
+   
+    background-color: rgb(36, 182, 48);
+    border-color: #adadad;
+}
+.btn-default:active {
+    
+    background-color: rgb(34, 194, 48);
+    border-color: #adadad;
+}
