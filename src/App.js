@@ -36,9 +36,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className='topnav'>
-          <input type="text" placeholder="Search..." name='search'></input>
-        </div>
+        
 
         <div className="center">
 
