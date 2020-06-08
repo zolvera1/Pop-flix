@@ -1,0 +1,17 @@
+.topnav { 
+    width: 900px; 
+    display: flex; 
+    justify-content: right; 
+}
+
+.topnav input[type=text] { 
+    float: right; 
+    padding: 6px; 
+    margin-top: 8px; 
+    font-size: 16px; 
+}
+
+.nav-filters{ 
+    border: 2px; 
+    border: black; 
+}
