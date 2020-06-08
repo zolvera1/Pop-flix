@@ -38,19 +38,49 @@
 }
 
 .topnav { 
-  width: 900px; 
   display: flex; 
-  justify-content: right; 
+  justify-content: flex-end; 
+  padding: 25px;
+  background-color: lightgray;
 }
 
 .topnav input[type=text] { 
-  float: right; 
+  float: left; 
   padding: 6px; 
   margin-top: 8px; 
   font-size: 16px; 
 }
 
 .nav-filters{ 
-  border: 2px; 
-  border: black; 
+  border-style:dotted; 
+  border-width: 2px;
+  display:flex; 
+  justify-content: left;
+  width:150px; 
+  padding: 25px; 
+
+}
+.filter-head { 
+  font-weight: bold;
+  font-size: 16px; 
+}
+
+.main { 
+  display: flex; 
+  align-items: stretch;
+}
+
+.movie-content { 
+  padding: 25px; 
+}
+
+.movie-grid { 
+  display: flex; 
+  justify-content: center; 
+  flex-direction: row; 
+  align-items: center;
+}
+
+.movie-item { 
+  padding: 10px; 
 }
