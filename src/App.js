@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import './styles.css';
 import './css/search.css'
 import Autocomplete from "./services/search";
-import logo from './logo.svg';
 import './App.css';
 import Collapsible from 'react-collapsible'; 
 import {Card} from 'react-bootstrap'; 
