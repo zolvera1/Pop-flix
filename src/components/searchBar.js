@@ -4,6 +4,7 @@ import "../services/Search Bar Config/css/autoCompleteHome.css";
 import "../css/search.css";
 import autoComplete from "../services/Search Bar Config/js/index";
 
+
 class SearchBar extends Component {
   constructor(props) {
     super(props);
@@ -16,9 +17,11 @@ class SearchBar extends Component {
   componentDidMount() {
     autoComplete("https://casecomp.konnectrv.io/movie", ["title"]);
   }
-  helloThere = e => {
+  helloThere = async e => {
     e.preventDefault();
-    alert();
+
+
+
   }
 
   render() {

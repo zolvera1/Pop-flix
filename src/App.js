@@ -21,6 +21,9 @@ import Filter from "./Filter"
 
 import SearchBar from "./components/searchBar";
 
+var json = require('./services/API-data.json');
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -50,14 +53,14 @@ class App extends Component {
 
         <h2>LazyLoad Demo</h2>
         <div className="post-container">
-          {data.map(post => (
+          {json.map(movie => (
             <LazyLoad
-              key={post.id}
+              key={movie.imdb_id}
               height={100}
               offset={[-100, 100]}
               placeholder={<Spinner />}
             >
-              <Post key={post.id} {...post} />
+              <Post key={movie.imdb_id} {...movie} />
             </LazyLoad>
           ))}
         </div>

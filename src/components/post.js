@@ -2,21 +2,22 @@ import React from "react";
 import "../css/lazy.css";
 import LazyLoad from "react-lazyload";
 
-function Post({ id, title, body }) {
+function Post({ id, original_title, overview, poster_path }) {
+    // function Post({ id, title, body }) {
     return (
         <div className="post">
             <LazyLoad
                 className="img"
                 once={true}
-                placeholder={<img src={`https://picsum.photos/id/${id}/5/5`} alt="..." />}
+                placeholder={<img src={`https://image.tmdb.org/t/p/w500${poster_path}`} alt="..." />}
             >
                 <div className="post-img">
-                    <img src={`https://picsum.photos/id/${id}/1000/1000`} alt="..." />
+                    <img src={`https://image.tmdb.org/t/p/w500${poster_path}`} alt="..." />
                 </div>
             </LazyLoad>
             <div className="post-body">
-                <h4>{title}</h4>
-                <p>{body}</p>
+                <h4>{original_title}</h4>
+                <p>{overview}</p>
             </div>
         </div>
     );
