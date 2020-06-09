@@ -7,8 +7,8 @@ export default class Filter extends React.Component {
         super(props);
         this.state = {
 
-            movies_all: [],
-            movies_considered: [],
+            movies_all: [], //objects
+            movies_considered: [], //array of indices
 
             movie_keys: [],
             movie_titles: [],
@@ -20,10 +20,9 @@ export default class Filter extends React.Component {
             movie_vote_averages: [],
             movie_languages: [],
             movie_pops: [],
-            //movie_genres: [],
 
-            shows_all: [],
-            shows_considered: [],
+            shows_all: [], //objects
+            shows_considered: [], //array of indices
 
             show_keys: [],
             show_titles: [],
@@ -36,18 +35,32 @@ export default class Filter extends React.Component {
             show_pops: [],
             show_genres: [],
 
-            //available_genres: new Set(),
+            available_services: new Set(),
+            selected_services: new Set(),
+            available_ratings: new Set(),
+            selected_ratings: new Set(),
 
             selected_average: [0, 10],
-            selected_services: [],
-            //selected_genres: [],
-            selected_media: [true, true] //movies, shows
+            selected_media: [true, true], //movies, shows
 
         };
     }
 
     componentDidMount() {
         this.grabMoviesAndShows();
+    }
+
+    //take an array of arrays and return a unified set
+    static reduceArrOfArr(data) {
+        let finalSet = new Set();
+        let i;
+        for (i = 0; i < data.length; i++) {
+            let j;
+            for (j = 0; j < data[i].length; j++) {
+                finalSet.add(data[i][j]);
+            }
+        }
+        return Array.from(finalSet);
     }
 
     //RV API call to grab movies/shows and store their data in arrays for parsing later
@@ -68,21 +81,21 @@ export default class Filter extends React.Component {
                 this.setState({ movie_languages: dataArray.map(data => data.original_language)  });
                 this.setState({ movie_pops: dataArray.map(data => data.popularity)  });
 
-                // //now grab all of the movies' info from IMDB and set total available genres
-                // let i;
-                // for (i = 0; i < this.state.movies_all.length; i++) {
-                //     let genres = [];
-                //     let j;
-                //     let movie_fetch = 'https://api.themoviedb.org/3/movie/' + this.state.movie_keys[i] + '?api_key=9b720ff3634dcb0e3e7923c780e028b9';
-                //     fetch(movie_fetch)
-                //         .then(result => result.json())
-                //         .then(details => {
-                //             genres = details.genres.map(deets => deets.name);
-                //             for (j = 0; j < genres.length; j++) {
-                //                 this.state.available_genres.add(genres[j]);
-                //             }
-                //         })
-                // }
+                //dynamically generate which platforms are available for streaming
+                let i;
+                let movie_plats = Filter.reduceArrOfArr(this.state.movie_platforms);
+                for (i = 0; i < movie_plats.length; i++) {
+                    let a_platform = movie_plats[i];
+                    this.state.available_services.add(a_platform);
+                }
+                //console.log(this.state.available_services);
+
+                //dynamically generate which maturity ratings are available
+                let ratings = Filter.reduceArrOfArr(this.state.movie_ratings);
+                for (i = 0; i < ratings.length; i++) {
+                    let a_rating = ratings[i];
+                    this.state.available_ratings.add(a_rating);
+                }
             }
         );
 
@@ -100,26 +113,170 @@ export default class Filter extends React.Component {
                 this.setState({ show_languages: dataArray.map(data => data.original_language)  });
                 this.setState({ show_pops: dataArray.map(data => data.popularity)  });
 
-                //now grab all of the shows' info from IMDB and set total available genres
-                /*let i;
-                for (i = 0; i < this.state.shows_all.length; i++) {
-                    let genres = [];
-                    let j;
-                    let show_fetch = 'https://api.themoviedb.org/3/tv/tt1844624?api_key=9b720ff3634dcb0e3e7923c780e028b9'
-                    //let show_fetch = 'https://api.themoviedb.org/3/tv/' + this.state.show_keys[i] + '?api_key=9b720ff3634dcb0e3e7923c780e028b9';
-                    fetch(show_fetch)
-                        .then(result => result.json())
-                        .then(details => {
-                            genres = details.genres.map(deets => deets.name);
-                            for (j = 0; j < genres.length; j++) {
-                                this.state.available_genres.add(genres[j]);
-                            }
-                        })
-                }*/
+                //dynamically generate which platforms are available for streaming
+                let i;
+                let show_plats = Filter.reduceArrOfArr(this.state.show_platforms);
+                for (i = 0; i < show_plats.length; i++) {
+                    let a_platform = show_plats[i];
+                    this.state.available_services.add(a_platform);
+                }
+
+                //dynamically generate which maturity ratings are available
+                let ratings = Filter.reduceArrOfArr(this.state.show_ratings);
+                for (i = 0; i < ratings.length; i++) {
+                    let a_rating = ratings[i];
+                    this.state.available_ratings.add(a_rating);
+                }
             }
         );
-        //console.log(this.state.available_genres);
     }
+
+    //apply all of the filters the user has selected
+    applyFilters() {
+        let i;
+
+        //initially set all movies and all shows to be considered
+        for (i = 0; i < this.state.movies_all.length; i++) {
+            this.state.movies_considered.push(i);
+        }
+        for (i = 0; i < this.state.shows_all.length; i++) {
+            this.state.shows_considered.push(i);
+        }
+
+        //each of these methods reduce this.state.movies_considered and this.state.shows_considered
+        this.scoreFilter();
+        this.serviceFilter();
+        this.mediaTypeFilter();
+        this.maturityFilter();
+    }
+
+    //call this method after applyFilters to grab all movies that currently obey the filter rules
+    grabFilteredMovies() {
+        let returnArray = [];
+        let i;
+        for (i = 0; i < this.state.movies_considered.length; i++) {
+            let movie_index = this.state.movies_considered[i];
+            returnArray.push(this.state.movies_all[movie_index]);
+        }
+        return returnArray;
+    }
+
+    //call this method after applyFilters to grab all shows that currently obey the filter rules
+    grabFilteredShows() {
+        let returnArray = [];
+        let i;
+        for (i = 0; i < this.state.movies_considered.length; i++) {
+            let movie_index = this.state.movies_considered[i];
+            returnArray.push(this.state.movies_all[movie_index]);
+        }
+        return returnArray;
+    }
+
+    //ratings 0 through 10
+    scoreFilter() {
+        let i;
+        let reduced_watchables = [];
+        let low_end = this.state.selected_average[0];
+        let high_end = this.state.selected_average[1];
+
+        for (i = 0; i < this.state.movies_considered.length; i++) {
+            let movie_index = this.state.movies_considered[i];
+
+            if (this.state.movie_vote_averages[movie_index] >= low_end && this.state.movie_vote_averages[movie_index] <= high_end) {
+                reduced_watchables.push(movie_index);
+            }
+        }
+        this.setState({ movies_considered: reduced_watchables});
+
+        reduced_watchables = [];
+        for (i = 0; i < this.state.shows_considered.length; i++) {
+            let show_index = this.state.shows_considered[i];
+            if (this.state.show_vote_averages[show_index] >= low_end && this.state.show_vote_averages[show_index] <= high_end) {
+                reduced_watchables.push(show_index);
+            }
+        }
+        this.setState({ shows_considered: reduced_watchables});
+    }
+
+    //what platform is it available on
+    serviceFilter() {
+        let i;
+        let reduced_watchables = [];
+        for (i = 0; i < this.state.movies_considered.length; i++) {
+            let movie_index = this.state.movies_considered[i];
+
+            let services_available = this.state.movie_platforms[movie_index];
+            let j;
+            let movie_available = false;
+            for (j = 0; j < services_available.length; j++) {
+                let a_platform = services_available[j];
+                if (this.state.selected_services.includes(a_platform)) {
+                    movie_available = true;
+                }
+            }
+            if (movie_available) {
+                reduced_watchables.push(this.state.movies_considered[movie_index]);
+            }
+        }
+        this.setState({ movies_considered: reduced_watchables });
+        reduced_watchables = [];
+
+        for (i = 0; i < this.state.shows_considered.length; i++) {
+            let show_index = this.state.movies_considered[i];
+
+            let services_available = this.state.show_platforms[show_index];
+            let j;
+            let show_available = false;
+            for (j = 0; j < services_available.length; j++) {
+                let a_platform = services_available[j];
+                if (this.state.selected_services.includes(a_platform)) {
+                    show_available = true;
+                }
+            }
+            if (show_available) {
+                reduced_watchables.push(this.state.shows_considered[show_index]);
+            }
+        }
+        this.setState({ shows_considered: reduced_watchables });
+    }
+
+    mediaTypeFilter() {
+        //whether we want movies and/or tv shows
+        if (this.state.selected_media[0] === false) {
+            this.setState({ movies_considered: [] });
+        }
+        if (this.state.selected_media[1] === false) {
+            this.setState({ shows_considered: [] });
+        }
+    }
+
+    //pg13, pg, r, nr
+    maturityFilter() {
+        let i;
+        let reduced_watchables = [];
+        for (i = 0; i < this.state.movies_considered.length; i++) {
+            let movie_index = this.state.movies_considered[i];
+            if (this.state.selected_ratings.includes(this.state.movie_ratings[movie_index])) {
+                reduced_watchables.push(movie_index);
+            }
+        }
+        this.setState({ movies_considered: reduced_watchables});
+        reduced_watchables = [];
+
+        for (i = 0; i < this.state.shows_considered.length; i++) {
+            let show_index = this.state.shows_considered[i];
+            if (this.state.selected_ratings.includes(this.state.show_ratings[show_index])) {
+                reduced_watchables.push(show_index);
+            }
+        }
+        this.setState({ shows_considered: reduced_watchables });
+    }
+
+    //variables to update with GUI interaction:
+    //this.state.selected_average[low_end, high_end] (this is the "user" score)
+    //this.state.selected_services (compare it against this.state.available_services)
+    //this.state.selected_media[movies?, shows?]
+    //this.state.selected_ratings (compare it against this.state.available_ratings) (G, PG, PG-13,...)
 
     //HTML
     render() {
