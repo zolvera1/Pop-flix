@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Collapsible from "react-collapsible";
-import { Card } from "react-bootstrap";
+import { Card, Row } from "react-bootstrap";
+import "./App.css"; 
+import Slider from '@material-ui/core/Slider';
+import ReactCardFlip from "react-card-flip"; 
+
 
 export default class Filter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+<<<<<<< HEAD
 
             movies_all: [],
             movies_considered: [],
@@ -41,13 +46,16 @@ export default class Filter extends React.Component {
             selected_average: [0, 10],
             selected_services: [],
             //selected_genres: [],
-            selected_media: [true, true] //movies, shows
-
+            selected_media: [true, true], //movies, shows
+            ratingsValue: [2,8],
+            isFlipped:false,
         };
+        this.handleClick = this.handleClick.bind(this); 
     }
 
     componentDidMount() {
         this.grabMoviesAndShows();
+       
     }
 
     //RV API call to grab movies/shows and store their data in arrays for parsing later
@@ -121,6 +129,20 @@ export default class Filter extends React.Component {
         //console.log(this.state.available_genres);
     }
 
+    handleRatingsChange(event) { 
+        this.setState({ratingsValue: event.target.ratingsValue}); 
+    }
+
+    handleLengthChange(event) { 
+        this.setState({lengthValue: event.target.lengthValue}); 
+    }
+
+    handleClick(e) { 
+        e.preventDefault(); 
+        this.setState(prevState => ({isFlipped: !prevState.isFlipped})); 
+    }
+
+
     //HTML
     render() {
         return (
@@ -131,7 +153,8 @@ export default class Filter extends React.Component {
                         <h3>Filter by...</h3>
                         <hr></hr>
                         <Collapsible trigger="Ratings" className="filter-head">
-                            <input type="range" name="ratings" min="0" max="10"></input>
+                            <br></br><br></br>
+                            <div className='slider-box'><Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/></div>
                         </Collapsible>
                         <br></br>
                         <Collapsible
@@ -158,10 +181,6 @@ export default class Filter extends React.Component {
                             <p> list off checkboxes of available genres</p>
                         </Collapsible>
                         <br></br>
-                        <Collapsible trigger="Length" className="filter-head">
-                            <input type="range" min="0" max="180"></input>
-                        </Collapsible>
-                        <br></br>
                         <Collapsible trigger="Media Type" className="filter-head">
                             <input id="movies" type="checkbox" />
                             <span>Movies</span>
@@ -174,13 +193,19 @@ export default class Filter extends React.Component {
                 </div>
                 <div className="movie-content">
                     <h1>Movie Collection</h1>
-                    <div className="movie-grid">
-                        <Card>
-                            <Card.Img variant="top" />
-                            <Card.Body>
-                                <Card.Title>Movie Title</Card.Title>
-                            </Card.Body>
-                        </Card>
+                    <div className="react-card">
+                       <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection='vertical'> 
+                       <div>
+                            this is front of card
+                            <button onClick={this.handleClick}>click to flip</button>
+                       </div>
+                       
+                       <div>
+                           <p>Title: </p>
+                           <br></br>
+                           <button onClick={this.handleClick}>click to flip</button>
+                       </div>
+                       </ReactCardFlip>
                     </div>
                 </div>
             </div>
