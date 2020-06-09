@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Collapsible from "react-collapsible";
 import { Card } from "react-bootstrap";
+import "./App.css"; 
+import Slider from '@material-ui/core/Slider';
+import ReactCardFlip from "react-card-flip"; 
+
 
 export default class Filter extends React.Component {
     constructor(props) {
@@ -41,13 +45,16 @@ export default class Filter extends React.Component {
             selected_average: [0, 10],
             selected_services: [],
             //selected_genres: [],
-            selected_media: [true, true] //movies, shows
-
+            selected_media: [true, true], //movies, shows
+            ratingsValue: [2,8],
+            isFlipped:false
         };
+        this.handleClick = this.handleClick.bind(this); 
     }
 
     componentDidMount() {
         this.grabMoviesAndShows();
+       
     }
 
     //RV API call to grab movies/shows and store their data in arrays for parsing later
@@ -121,69 +128,93 @@ export default class Filter extends React.Component {
         //console.log(this.state.available_genres);
     }
 
+    handleRatingsChange(event) { 
+        this.setState({ratingsValue: event.target.ratingsValue}); 
+    }
+
+    handleClick(e) { 
+        e.preventDefault(); 
+        this.setState(prevState => ({isFlipped: !prevState.isFlipped})); 
+    }
+
+
     //HTML
     render() {
         return (
+            
             <div className="main">
-                <div style={{ height: "140px" }}></div>
-                <div className="nav-filters">
-                    <div className="sort">
-                        <h3>Filter by...</h3>
-                        <hr></hr>
-                        <Collapsible trigger="Ratings" className="filter-head">
-                            <input type="range" name="ratings" min="0" max="10"></input>
-                        </Collapsible>
-                        <br></br>
-                        <Collapsible
-                            trigger="Streaming Services"
-                            className="filter-head"
-                        >
-                            <label className="checkbox-label">
-                                <input id="Netflix" type="checkbox" />
-                                <span>Netflix</span>
-                                <br></br>
-                                <input id="amazon" type="checkbox" />
-                                <span>Amazon Prime</span>
-                                <br></br>
-                                <input id="hbo" type="checkbox" />
-                                <span>HBO</span>
-                                <br></br>
-                                <input id="hulu" type="checkbox" />
-                                <span>Hulu</span>
-                                <br></br>
-                            </label>
-                        </Collapsible>
-                        <br></br>
-                        <Collapsible trigger="Genres" className="filter-head">
-                            <p> list off checkboxes of available genres</p>
-                        </Collapsible>
-                        <br></br>
-                        <Collapsible trigger="Length" className="filter-head">
-                            <input type="range" min="0" max="180"></input>
-                        </Collapsible>
-                        <br></br>
-                        <Collapsible trigger="Media Type" className="filter-head">
-                            <input id="movies" type="checkbox" />
-                            <span>Movies</span>
+            <div style={{ height: "140px" }}></div> 
+            <div className="nav-filters">
+                <div className="sort">
+                    <h3>Filter by...</h3>
+                    <hr></hr>
+                    <Collapsible trigger="Vote Ratings" className="filter-head">
+                        <br></br><br></br>
+                        <div className='slider-box'>
+                            <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
+                            </div>
+                    </Collapsible>
+                    <br></br>
+                    <Collapsible trigger="Streaming Services" className="filter-head">
+                        <label className="checkbox-label">
+                           <input id="Netflix" type="checkbox" />
+                            <span>Netflix</span>
                             <br></br>
-                            <input id="shows" type="checkbox" />
-                            <span>TV Shows</span>
-                        </Collapsible>
+                            <input id="amazon" type='checkbox'/>
+                            <span>Amazon Prime</span>
+                            <br></br>
+                            <input id="hbo" type="checkbox" />
+                            <span>HBO</span>
+                            <br></br>
+                            <input id="hulu" type="checkbox" />
+                            <span>Hulu</span>
+                            <br></br>
+                        </label>
+                    </Collapsible>
+                    <br></br>
+                    <Collapsible trigger="Maturity Ratings" className="filter-head">
+                    <label className="checkbox-label">
+                            <input id="NR" type="checkbox" />
+                            <span>NR</span>
+                            <br></br>
+                            <input id="r" type="checkbox" />
+                            <span>R</span>
+                            <br></br>
+                            <input id="PG-13" type="checkbox" />
+                            <span>PG-13</span>
+                            <br></br>
+                            <input id="PG" type="checkbox" />
+                            <span>PG</span>
+                            <br></br>
+                        </label>
+                    </Collapsible>
+                    <br></br>
+                    <Collapsible trigger="Media Type" className="filter-head">
+                        <input id="movies" type="checkbox" />
+                        <span>Movies</span>
                         <br></br>
-                    </div>
+                        <input id="shows" type="checkbox" />
+                        <span>TV Shows</span>
+                    </Collapsible>
+                    <br></br>
                 </div>
-                <div className="movie-content">
-                    <h1>Movie Collection</h1>
-                    <div className="movie-grid">
-                        <Card>
-                            <Card.Img variant="top" />
-                            <Card.Body>
-                                <Card.Title>Movie Title</Card.Title>
-                            </Card.Body>
-                        </Card>
-                    </div>
+            </div>
+            <div className="movie-content">
+                <h1>Movie Collection</h1>
+                <div className="react-card">
+                   <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection='vertical'> 
+                   <div>
+                        this is front of card w/ Title
+                        <button onClick={this.handleClick}>click to flip</button>
+                   </div>
+                   <div>
+                       this has back of card with other info 
+                       <button onClick={this.handleClick}>click to flip</button>
+                   </div>
+                   </ReactCardFlip>
+                </div>
                 </div>
             </div>
         )
-    }
-}
+   } 
+ }
