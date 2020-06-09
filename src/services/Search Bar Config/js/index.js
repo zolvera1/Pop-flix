@@ -35,7 +35,7 @@ export default function AutocompleteStartup(URL, arrayOfKeys) {
 
         const source = await fetch(URL);
 
-        // fetch("./db/generic.json");
+
         const data = await source.json();
 
         // Returns Fetched data
