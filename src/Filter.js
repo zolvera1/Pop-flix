@@ -152,9 +152,11 @@ export default class Filter extends React.Component {
                     <div className="sort">
                         <h3>Filter by...</h3>
                         <hr></hr>
-                        <Collapsible trigger="Ratings" className="filter-head">
+                        <Collapsible trigger="Vote Ratings" className="filter-head">
                             <br></br><br></br>
-                            <div className='slider-box'><Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/></div>
+                            <div className='slider-box'>
+                                <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
+                                </div>
                         </Collapsible>
                         <br></br>
                         <Collapsible
@@ -177,8 +179,21 @@ export default class Filter extends React.Component {
                             </label>
                         </Collapsible>
                         <br></br>
-                        <Collapsible trigger="Genres" className="filter-head">
-                            <p> list off checkboxes of available genres</p>
+                        <Collapsible trigger="Maturity Ratings" className="filter-head">
+                        <label className="checkbox-label">
+                                <input id="NR" type="checkbox" />
+                                <span>NR</span>
+                                <br></br>
+                                <input id="r" type="checkbox" />
+                                <span>R</span>
+                                <br></br>
+                                <input id="PG" type="checkbox" />
+                                <span>PG</span>
+                                <br></br>
+                                <input id="PG-13" type="checkbox" />
+                                <span>PG-13</span>
+                                <br></br>
+                            </label>
                         </Collapsible>
                         <br></br>
                         <Collapsible trigger="Media Type" className="filter-head">
