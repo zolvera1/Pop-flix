@@ -27,6 +27,7 @@ class App extends Component {
 
     this.state = {
       data: [],
+      searchValue: null
     };
   }
 

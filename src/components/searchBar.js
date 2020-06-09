@@ -16,26 +16,34 @@ class SearchBar extends Component {
   componentDidMount() {
     autoComplete("https://casecomp.konnectrv.io/movie", ["title"]);
   }
+  helloThere = e => {
+    e.preventDefault();
+    alert();
+  }
 
   render() {
     return (
       <div className="center">
-        <div className="contanier">
-          <div className="centered-container">
-            <input
-              id="autoComplete"
-              autoComplete="off"
-              type="text"
-              tabIndex="1"
-              maxLength="25"
-            />
-            <div className="selection"></div>
-          </div>
-        </div>
+        <form onSubmit={this.helloThere}>
 
-        <button type="button" className="btn btn-default" id="search-btn">
-          Search
+
+          <div className="contanier">
+            <div className="centered-container">
+              <input
+                id="autoComplete"
+                autoComplete="off"
+                type="text"
+                tabIndex="1"
+                maxLength="25"
+              />
+              <div className="selection"></div>
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-default" id="search-btn">
+            Search
         </button>
+        </form>
       </div>
     );
   }
