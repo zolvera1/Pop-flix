@@ -1,0 +1,236 @@
+.centered-container {
+  width: 360px;
+  height: 90px;
+  /* margin: auto; */
+  text-align: center;
+  position: relative;
+}
+#autoComplete_wrapper {
+  position: absolute;
+  /* display: inline-block; */
+}
+
+#autoComplete {
+  /* position: relative; */
+
+  padding: 0rem 6rem 0.3rem 3.3rem;
+  margin-top: 20px;
+
+  height: 40px;
+  width: 200px;
+  /* font-size: 1.2rem; */
+  outline: none;
+  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
+  border: 0.05rem solid rgba(122, 191, 255, 0.548);
+  caret-color: rgb(122, 255, 200);
+  color: rgba(255, 255, 255, 0);
+  background-image: url(./images/magni.png);
+  background-repeat: no-repeat;
+  background-size: 1.3rem;
+  background-origin: border-box;
+
+  /* clip-path: polygon(5% 0%, 90% 30%, 90% 100%, 0 calc(100% - 0.1vw)); */
+  /* background-position: center; */
+  background-position: left 0.7rem top 10px;
+  transition: all 0.4s ease;
+  -webkit-transition: all -webkit-transform 0.4s ease;
+  text-overflow: ellipsis;
+}
+
+#autoComplete::placeholder {
+  padding-top: 0;
+  margin-top: 0;
+  /* line-height: 10px; */
+  font-size: 13px;
+  color: rgba(158, 165, 187, 0.664);
+  transition: all 0.3s ease;
+}
+
+#autoComplete:hover::placeholder {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(145, 162, 180, 0.87);
+  transition: all 0.3s ease;
+  -webkit-transition: all -webkit-transform 0.3s ease;
+}
+
+#autoComplete:focus::placeholder {
+  padding: 0.1rem 0.6rem;
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(145, 162, 180, 0.87);
+  transition: all 0.3s ease;
+  -webkit-transition: all -webkit-transform 0.3s ease;
+}
+
+#autoComplete::selection {
+  color: transparent;
+}
+
+#autoComplete:focus::selection {
+  color: #fff;
+  background-color: rgb(240, 69, 69);
+}
+
+#autoComplete:hover {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0 2rem 0 3.5rem;
+  color: rgb(63, 99, 122);
+  height: 45px;
+  width: 260px;
+  background-image: url(./images/magni.png);
+  background-size: 1.9rem;
+  background-position: left 10px top 10px;
+  transition: all 0.3s ease;
+  -webkit-transition: all -webkit-transform 0.3s ease;
+}
+
+#autoComplete:focus {
+  font-size: 1.2rem;
+  padding: 0 2rem 0 3.5rem;
+  color: rgb(125, 137, 145);
+  height: 45px;
+  width: 260px;
+  border: 0.05rem solid rgb(24, 91, 136);
+  background-image: url(./images/magni.png);
+  background-size: 1.9rem;
+  background-position: left 10px top 10px;
+  box-shadow: rgba(255, 122, 122, 0.1) 0px 0px 20px 5px;
+}
+
+#autoComplete_list {
+  position: absolute;
+
+  z-index: 1000;
+  padding: 0;
+  margin-left: 30px;
+  /* left: 0;
+  right: 0; */
+  margin-top: 0px;
+  top: 73%;
+  list-style-type: none;
+  color: rgb(18, 235, 65);
+  /* margin-left: auto;
+  margin-right: auto; */
+  width: 300px;
+  transition: all 0.1s ease-in-out;
+  -webkit-transition: all -webkit-transform 0.1s ease;
+}
+
+.autoComplete_result {
+  margin: 0px auto;
+  padding: 0.6rem;
+  max-width: 350px;
+  border: 0rem solid #e3e3e3;
+  list-style: none;
+  text-align: left;
+  font-size: 1.1rem;
+  color: rgb(233, 222, 222);
+  transition: all 0.1s ease-in-out;
+  background-color: rgb(57, 69, 87);
+}
+
+.autoComplete_result::selection {
+  color: rgba(#ffffff, 0);
+  background-color: rgba(#ffffff, 0);
+}
+
+.autoComplete_result:last-child {
+  border-radius: 0 0 1rem 1rem;
+}
+
+.autoComplete_result:hover {
+  cursor: pointer;
+  background-color: rgba(39, 122, 155, 0.9);
+  border-left: 2px solid rgba(255, 122, 122, 1);
+  border-right: 2px solid rgba(255, 122, 122, 1);
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+.autoComplete_result:focus {
+  outline: none;
+  background-color: rgba(60, 107, 179, 0.9);
+  border-left: 2px solid rgba(255, 122, 122, 1);
+  border-right: 2px solid rgba(255, 122, 122, 1);
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+.autoComplete_highlighted {
+  opacity: 1;
+  color: rgb(66, 219, 240);
+  font-weight: bold;
+}
+
+.autoComplete_highlighted::selection {
+  color: rgba(#ffffff, 0);
+  background-color: rgba(#ffffff, 0);
+}
+
+.autoComplete_selected {
+  cursor: pointer;
+  background-color: rgba(56, 84, 92, 0.9);
+  border-left: 2px solid rgb(58, 167, 211);
+  border-right: 2px solid rgb(58, 167, 211);
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+@media only screen and (max-width: 600px) {
+  #autoComplete {
+    width: 5rem;
+  }
+
+  #autoComplete:focus {
+    width: 11rem;
+    background-size: 1.6rem;
+    background-position: left 1.1rem top 0.75rem;
+  }
+
+  .autoComplete_result:first-child {
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .autoComplete_result:last-child {
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  .autoComplete_result:only-child {
+    border-radius: 1rem;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  #autoComplete {
+    border-width: 1px;
+  }
+
+  #autoComplete:hover {
+    border-width: 1px;
+  }
+
+  #autoComplete:focus {
+    border-width: 1px;
+  }
+}
+
+@-moz-document url-prefix() {
+  #autoComplete {
+    border-width: 1px;
+    background-size: 1.2rem;
+    background-origin: border-box;
+    background-position: center;
+  }
+
+  #autoComplete:hover {
+    border-width: 1px;
+  }
+
+  #autoComplete:focus {
+    border-width: 1px;
+    background-position: left 1.1rem top 0.8rem;
+  }
+}

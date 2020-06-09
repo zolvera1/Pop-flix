@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -37,50 +33,49 @@
   }
 }
 
-.topnav { 
-  display: flex; 
-  justify-content: flex-end; 
+.topnav {
+  display: flex;
+  justify-content: flex-end;
   padding: 25px;
   background-color: lightgray;
 }
 
-.topnav input[type=text] { 
-  float: left; 
-  padding: 6px; 
-  margin-top: 8px; 
-  font-size: 16px; 
+.topnav input[type="text"] {
+  float: left;
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 16px;
 }
 
-.nav-filters{ 
-  border-style:dotted; 
+.nav-filters {
+  border-style: dotted;
   border-width: 2px;
-  display:flex; 
+  display: flex;
   justify-content: left;
-  width:150px; 
-  padding: 25px; 
-
+  width: 150px;
+  padding: 25px;
 }
-.filter-head { 
+.filter-head {
   font-weight: bold;
-  font-size: 16px; 
+  font-size: 16px;
 }
 
-.main { 
-  display: flex; 
+.main {
+  display: flex;
   align-items: stretch;
 }
 
-.movie-content { 
-  padding: 25px; 
+.movie-content {
+  padding: 25px;
 }
 
-.movie-grid { 
-  display: flex; 
-  justify-content: center; 
-  flex-direction: row; 
+.movie-grid {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
   align-items: center;
 }
 
-.movie-item { 
-  padding: 10px; 
+.movie-item {
+  padding: 10px;
 }
