@@ -1,29 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-       <div class='topnav'>
-                <input type="text" placeholder="Search..." name='search'></input>
+import "./styles.css";
+import "./services/Search Bar Config/css/autoCompleteHome.css";
+import "./css/search.css";
+import "./App.css";
+
+import NavBar from "./components/navbar";
+import background from "./images/aqua-man.jpg";
+import Filter from "./Filter"
+
+import SearchBar from "./components/searchBar";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: [],
+    };
+  }
+
+  componentDidMount() {}
+
+  render() {
+    return (
+      <React.Fragment>
+        <img src={background} id="aqua" alt="hello"></img>
+        <NavBar></NavBar>
+        <div className="App">
+          <div className="all-center">
+            <SearchBar></SearchBar>
+          </div>
+
+          <Filter />
+
         </div>
-        <div class='nav-filters'>
-            <h4>Ratings</h4>
-            <h4>Streaming Service</h4>
-            <h4>Genre</h4>
-            <h4>Length</h4>
-            <h4>Media Type</h4>
-        </div>
-        <div class = "header-container"> 
-            <h1>Movie Collection</h1>
-        </div>
-        
-        <div class = "movies">
-            <p> this is where all the movies would go</p>
-        </div>
-    </div>
-  );
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
