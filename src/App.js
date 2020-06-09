@@ -4,16 +4,19 @@ import "./styles.css";
 import "./services/Search Bar Config/css/autoCompleteHome.css";
 import "./css/search.css";
 import "./App.css";
-import Collapsible from "react-collapsible";
-import { Card } from "react-bootstrap";
+
 import NavBar from "./components/navbar";
 import background from "./images/aqua-man.jpg";
+
 import LazyLoad from "react-lazyload";
 import "./css/lazy.css";
 import Spinner from "./components/spinner";
 import Post from "./components/post";
 
 import data from "./services/data";
+
+
+import Filter from "./Filter"
 
 
 import SearchBar from "./components/searchBar";
@@ -39,7 +42,8 @@ class App extends Component {
             <SearchBar></SearchBar>
           </div>
 
-          <div style={{ height: "140px" }}></div>
+          <Filter />
+
 
           <div className="main">
             <div className="nav-filters">
@@ -100,6 +104,7 @@ class App extends Component {
               </div>
             </div>
           </div>
+
 
 
         </div>
