@@ -33,29 +33,20 @@
   }
 }
 
-.topnav {
-  display: flex;
-  justify-content: flex-end;
-  padding: 25px;
-  background-color: lightgray;
-}
-
-.topnav input[type="text"] {
-  float: left;
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 16px;
-}
-
 .nav-filters {
   display: flex;
-  justify-content: left;
-  width: 250px;
+  justify-content: space-around;
   padding: 25px; 
+  /* border: dotted 2px black;   */
+  width: 100%; 
 }
 .filter-head {
   font-weight: bold;
   font-size: 16px;
+  padding: 12px; 
+  /* display: flex;
+  justify-content: space-around;   */
+
 }
 
 .main {
@@ -64,27 +55,21 @@
   padding-top: 25px;
 }
 
-.movie-content {
-  padding: 25px;
-}
-
-.movie-grid {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-}
-
-.movie-item {
-  padding: 10px;
-}
-
 
 .slider {  
-  margin-left: 18px; 
-  margin-right: 18px; 
+   /* margin-left: 18px;  */
+  /* margin-right: 18px;  */
 }
 
 .slider-box { 
-  width: 100px; 
+  width: 150px; 
+}
+
+.Collapsible__contentInner { 
+  padding: 12px; 
+  border: dotted white 8px; ; 
+}
+
+.Collapsible__contentOuter { 
+  padding: 3px; 
 }

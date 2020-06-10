@@ -43,11 +43,12 @@ class App extends Component {
           </div>
         </div>
         <Filter />
+        
 
 
 
-
-        <h2>LazyLoad Demo</h2>
+        {console.log("print")}
+        <h2>Movie Collection</h2>
         <div className="post-container">
           {json.map(movie => (
             <LazyLoad
