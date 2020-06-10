@@ -232,7 +232,8 @@ export default class Filter extends React.Component {
     //ratings 0 through 10
     async scoreFilter() {
         let i;
-        let reduced_watchables = [];
+        let reduced_watchables_m = [];
+
         let low_end = this.state.selected_average[0];
         let high_end = this.state.selected_average[1];
         console.log(low_end); 
@@ -242,21 +243,24 @@ export default class Filter extends React.Component {
             let movie_index = this.state.movies_considered[i];
 
             if (this.state.movie_vote_averages[movie_index] >= low_end && this.state.movie_vote_averages[movie_index] <= high_end) {
-                reduced_watchables.push(movie_index);
+                reduced_watchables_m.push(movie_index);
             }
         }
-        this.setState({ movies_considered: reduced_watchables});
 
-        reduced_watchables = [];
+        let reduced_watchables_s = [];
+
         for (i = 0; i < this.state.shows_considered.length; i++) {
             let show_index = this.state.shows_considered[i];
             if (this.state.show_vote_averages[show_index] >= low_end && this.state.show_vote_averages[show_index] <= high_end) {
-                reduced_watchables.push(show_index);
+                reduced_watchables_s.push(show_index);
             }
         }
-        this.setState({ shows_considered: reduced_watchables});
 
-        return 1;
+        this.setState({ shows_considered: reduced_watchables_s}, () => {
+            this.setState({ movies_considered: reduced_watchables_m}, () => {
+                return 1;
+            });
+        });
     }
 
     //what platform is it available on
