@@ -248,7 +248,7 @@ export default class Filter extends React.Component {
     //what platform is it available on
     async serviceFilter() {
         let i;
-        let reduced_watchables = [];
+        let reduced_watchables_m = [];
 
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
@@ -262,11 +262,11 @@ export default class Filter extends React.Component {
                 movie_available = true;
             }
             if (movie_available) {
-                reduced_watchables.push(this.state.movies_considered[movie_index]);
+                reduced_watchables_m.push(this.state.movies_considered[movie_index]);
             }
         }
-        this.setState({ movies_considered: reduced_watchables });
-        reduced_watchables = [];
+
+        let reduced_watchables_s = [];
 
         for (i = 0; i < this.state.shows_considered.length; i++) {
             let show_index = this.state.shows_considered[i];
@@ -280,12 +280,15 @@ export default class Filter extends React.Component {
                 show_available = true;
             }
             if (show_available) {
-                reduced_watchables.push(this.state.shows_considered[show_index]);
+                reduced_watchables_s.push(this.state.shows_considered[show_index]);
             }
         }
-        this.setState({ shows_considered: reduced_watchables });
 
-        return 1;
+        this.setState({ movies_considered: reduced_watchables_m }, () => {
+            this.setState({ shows_considered: reduced_watchables_s }, () => {
+                return 1;
+            });
+        });
     }
 
     async mediaTypeFilter() {
@@ -303,7 +306,7 @@ export default class Filter extends React.Component {
     //pg13, pg, r, nr
     async maturityFilter() {
         let i;
-        let reduced_watchables = [];
+        let reduced_watchables_m = [];
         //only push movies if they match our requested maturity ratings
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let keep_movie = false;
@@ -319,23 +322,25 @@ export default class Filter extends React.Component {
                 keep_movie = true;
             }
             if (keep_movie) {
-                reduced_watchables.push(movie_index);
+                reduced_watchables_m.push(movie_index);
             }
         }
-        this.setState({ movies_considered: reduced_watchables});
-        reduced_watchables = [];
+
+        let reduced_watchables_s = [];
 
         //only push the shows if non of the ratings are selected
         if (!(this.state.include_NR || this.state.include_R || this.state.include_PG13 || this.state.include_PG)) {
             for (i = 0; i < this.state.shows_considered.length; i++) {
                 let show_index = this.state.shows_considered[i];
-                reduced_watchables.push(show_index);
+                reduced_watchables_s.push(show_index);
             }
-
-            this.setState({ shows_considered: reduced_watchables });
         }
 
-        return 1;
+        this.setState({ movies_considered: reduced_watchables_m}, () => {
+            this.setState({ shows_considered: reduced_watchables_s }, () => {
+                return 1;
+            });
+        });
     }
 
     grabAvailableServices() {
