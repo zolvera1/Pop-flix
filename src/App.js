@@ -47,7 +47,7 @@ class App extends Component {
 
 
 
-        {console.log("print this from app")}
+        {console.log("print")}
         <h2>Movie Collection</h2>
         <div className="post-container">
           {json.map(movie => (
