@@ -190,6 +190,10 @@ export default class Filter extends React.Component {
                 await this.mediaTypeFilter();
                 await this.maturityFilter();
 
+                console.log(this.grabFilteredMovies().length);
+                console.log(this.grabFilteredShows().length);
+                console.log(this.grabFilteredAll().length);
+
                 console.log("movies: " + this.state.movies_considered);
                 console.log("shows: " + this.state.shows_considered);
             });
@@ -211,9 +215,9 @@ export default class Filter extends React.Component {
     grabFilteredShows() {
         let returnArray = [];
         let i;
-        for (i = 0; i < this.state.movies_considered.length; i++) {
-            let movie_index = this.state.movies_considered[i];
-            returnArray.push(this.state.movies_all[movie_index]);
+        for (i = 0; i < this.state.shows_considered.length; i++) {
+            let show_index = this.state.shows_considered[i];
+            returnArray.push(this.state.shows_considered[show_index]);
         }
         return returnArray;
     }
