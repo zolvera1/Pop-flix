@@ -57,7 +57,7 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <Filter />
+        <Filter parentMethod={this.refreshDataArray} />
 
 
 
@@ -68,7 +68,7 @@ class App extends Component {
 
 
 
-          <BodyLay values={this.state.data}></BodyLay>
+          <BodyLay values={this.state.data} ></BodyLay>
 
         </div>
 
@@ -77,6 +77,7 @@ class App extends Component {
       </React.Fragment>
     );
   }
+
   SearchedItem = async e => {
     e.preventDefault();
 
@@ -96,6 +97,15 @@ class App extends Component {
 
 
 
+  }
+
+  refreshDataArray = async (newData) => {
+
+
+    this.setState({ data: newData },()=>{
+      console.log("another data",this.state.data);
+      
+    })
   }
 
 }

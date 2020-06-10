@@ -190,10 +190,13 @@ export default class Filter extends React.Component {
                 await this.mediaTypeFilter();
                 await this.maturityFilter();
 
+this.props.parentMethod(this.grabFilteredAll());
                 console.log("movies: " + this.state.movies_considered);
                 console.log("shows: " + this.state.shows_considered);
             });
         });
+
+        
     }
 
     //call this method after applyFilters to grab all movies that currently obey the filter rules
@@ -204,6 +207,7 @@ export default class Filter extends React.Component {
             let movie_index = this.state.movies_considered[i];
             returnArray.push(this.state.movies_all[movie_index]);
         }
+        console.log("helloooo",returnArray);
         return returnArray;
     }
 
