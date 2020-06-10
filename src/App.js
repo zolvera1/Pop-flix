@@ -27,7 +27,20 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.setState({ data: json })
+    //this.setState({ data: json })
+
+    fetch('https://casecomp.konnectrv.io/movie')
+      .then(response => response.json())
+      .then(dataArray => {
+
+
+
+        this.setState({ data: dataArray });
+        // console.log(dataArray);
+      }
+      );
+
+
   }
 
   render() {
@@ -46,7 +59,7 @@ class App extends Component {
           </div>
         </div>
         <Filter />
-        
+
 
 
 
@@ -55,12 +68,12 @@ class App extends Component {
         <div className="post-container">
           {this.state.data.map(movie => (
             <LazyLoad
-              key={movie.imdb_id}
+              key={movie.imdb}
               height={100}
               offset={[-100, 100]}
               placeholder={<Spinner />}
             >
-              <Post key={movie.imdb_id} {...movie} />
+              <Post key={movie.imdb} {...movie} />
             </LazyLoad>
           ))}
         </div>
@@ -86,7 +99,7 @@ class App extends Component {
 
     this.setState({ data: jsonMovies })
 
-    console.log(1, jsonMovies);
+    // console.log(1, jsonMovies);
 
 
   }
