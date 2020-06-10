@@ -359,7 +359,7 @@ export default class Filter extends React.Component {
     //call this method after checking/un-checking whether movies and/or shows are allowed
     updateMediaAndApply(movies_allowed, shows_allowed) {
         this.setState({ selected_media: [movies_allowed, shows_allowed] }, () => {
-            console.log(this.state.selected_average);
+            console.log(this.state.selected_media);
             this.applyFilters();
         });
     }
