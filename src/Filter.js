@@ -148,14 +148,19 @@ export default class Filter extends React.Component {
     //apply all of the filters the user has selected
     applyFilters() {
         let i;
+        let movies_considered_reset = [];
+        let shows_considered_reset = [];
 
         //initially set all movies and all shows to be considered
         for (i = 0; i < this.state.movies_all.length; i++) {
-            this.state.movies_considered.push(i);
+            movies_considered_reset.push(i);
         }
         for (i = 0; i < this.state.shows_all.length; i++) {
-            this.state.shows_considered.push(i);
+            shows_considered_reset.push(i);
         }
+
+        this.setState({ movies_considered: movies_considered_reset });
+        this.setState({ shows_considered: shows_considered_reset });
 
         //each of these methods reduce this.state.movies_considered and this.state.shows_considered
         this.scoreFilter();
