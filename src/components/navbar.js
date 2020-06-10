@@ -33,7 +33,7 @@ class NavBar extends Component {
         <nav className="nav flex-row" style={{ padding: "10px" }}>
           <div className="nav-menu">
             <div className="nav-brand " style={{ marginTop: "0" }}>
-              <a href="#" className="text-black " style={{ marginTop: "0" }}><img className="logo"
+              <a href="/#" className="text-black " style={{ marginTop: "0" }}><img alt="logo" className="logo"
                 src={logo} /></a>
             </div>
           </div>
@@ -50,13 +50,13 @@ class NavBar extends Component {
           </div>
           <div className="social text-black">
 
-            <a href="#" className="icons-x"><i className="fab fa-facebook-f"></i></a>
+            <a href="/#" className="icons-x"><i className="fab fa-facebook-f"></i></a>
 
             <a href="https://github.com/zolvera1/Pop-flix" className="icons-x"><i className="fab fa-github"></i></a>
 
-            <a href="#" className="icons-x"><i className="fab fa-instagram"></i></a>
+            <a href="/#" className="icons-x"><i className="fab fa-instagram"></i></a>
 
-            <a href="#" className="icons-x"><i className="fab fa-youtube"></i></a>
+            <a href="/#" className="icons-x"><i className="fab fa-youtube"></i></a>
           </div>
         </nav>
       </React.Fragment>

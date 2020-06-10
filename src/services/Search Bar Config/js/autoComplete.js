@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-console
 import * as autoCompleteView from "./autoCompleteView";
 import { Polyfill } from "./polyfill";
+
 export default class autoComplete {
   constructor(config) {
     const {
@@ -41,11 +42,11 @@ export default class autoComplete {
     // Build results list DOM element
     const resultsListView = render
       ? autoCompleteView.createResultsList({
-          container,
-          destination: destination || autoCompleteView.getInput(selector),
-          position,
-          element: resultsListElement,
-        })
+        container,
+        destination: destination || autoCompleteView.getInput(selector),
+        position,
+        element: resultsListElement,
+      })
       : null;
 
     this.selector = selector;
@@ -60,11 +61,7 @@ export default class autoComplete {
       condition,
     };
     this.searchEngine =
-      searchEngine === "loose"
-        ? "loose"
-        : typeof searchEngine === "function"
-        ? searchEngine
-        : "strict";
+      searchEngine === "loose" ? "loose" : typeof searchEngine === "function" ? searchEngine : "strict";
     this.threshold = threshold;
     this.debounce = debounce;
     this.resultsList = {
@@ -111,14 +108,9 @@ export default class autoComplete {
         // Holds current record character
         let recordChar = record[number];
         // Matching case
-        if (
-          searchPosition < query.length &&
-          recordLowerCase[number] === query[searchPosition]
-        ) {
+        if (searchPosition < query.length && recordLowerCase[number] === query[searchPosition]) {
           // Highlight matching character
-          recordChar = this.highlight
-            ? autoCompleteView.highlight(recordChar)
-            : recordChar;
+          recordChar = this.highlight ? autoCompleteView.highlight(recordChar) : recordChar;
           // Increment search position
           searchPosition++;
         }
@@ -139,9 +131,7 @@ export default class autoComplete {
         // Search for a match Query in Record
         query = pattern.exec(record);
         // Returns the match
-        return this.highlight
-          ? record.replace(query, autoCompleteView.highlight(query))
-          : record;
+        return this.highlight ? record.replace(query, autoCompleteView.highlight(query)) : record;
       }
     }
   }
@@ -153,27 +143,14 @@ export default class autoComplete {
    *
    * @return {*}
    */
-  async listMatchedResults(data) {
-    //==================== Second key stroke ==========================
-
-    // console.log(this.queryValue); //queryvalue = value un search bar
-    // const source = await fetch(
-    //   `http://dummy.restapiexample.com/api/v1/employees`
-    // );
-    // // fetch("./db/generic.json");
-    // const data1 = await source.json();
-    // // console.log("0", data1.data);
-    this.dataStream = data;
-
-    ///--------------- End of API Fetchig ----------------------------///////
-
-    return new Promise((resolve) => {
+  listMatchedResults(data) {
+    return new Promise(resolve => {
       // Final highlighted results list
       const resList = [];
       // Checks input has matches in data source
       data.filter((record, index) => {
         // Search/Matching function
-        const search = (key) => {
+        const search = key => {
           // This Record value
           const recordValue = key ? record[key] : record;
           // Check if record does exist before search
@@ -210,8 +187,7 @@ export default class autoComplete {
           // If no data key not set
         } else {
           search();
-        } // eslint-disable-next-line
-        return {};
+        }
       });
       // Sorting / Slicing final results list
       const list = this.sort
@@ -263,25 +239,21 @@ export default class autoComplete {
      *
      * @return void
      */
-    const exec = async (event) => {
+    const exec = event => {
       // Gets the input search value
       const inputValue =
-        input instanceof HTMLInputElement ||
-        input instanceof HTMLTextAreaElement
+        input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement
           ? input.value.toLowerCase()
           : input.innerHTML.toLowerCase();
       // Intercept query value
       const queryValue = (this.queryValue =
-        this.query && this.query.manipulate
-          ? this.query.manipulate(inputValue)
-          : inputValue);
+        this.query && this.query.manipulate ? this.query.manipulate(inputValue) : inputValue);
       // resultsList Render Switch
       const renderResultsList = this.resultsList.render;
       // App triggering condition
       const triggerCondition = this.trigger.condition
         ? this.trigger.condition(queryValue)
-        : queryValue.length >= this.threshold &&
-          queryValue.replace(/ /g, "").length;
+        : queryValue.length >= this.threshold && queryValue.replace(/ /g, "").length;
 
       /**
        * Event emitter on input field
@@ -304,19 +276,19 @@ export default class autoComplete {
               results: results ? results.list : null,
             },
             cancelable: true,
-          })
+          }),
         );
       };
       // Checks if results will be rendered or NOT
       if (renderResultsList) {
         const resultsList = this.resultsList.view;
         // Clear Results function holder
-        autoCompleteView.clearResults(resultsList);
+        const clearResults = autoCompleteView.clearResults(resultsList);
         // Check if input is not empty
         // or just have space before triggering the app
         if (triggerCondition) {
           // > List matching results
-          this.listMatchedResults(this.dataStream, event).then((list) => {
+          this.listMatchedResults(this.dataStream, event).then(list => {
             // 1- Event emitter on input field
             eventEmitter(event, list);
             // 2- If resultsList set to render
@@ -327,30 +299,15 @@ export default class autoComplete {
                 this.noResults();
               } else {
                 // 4- Rendering matching results to the UI list
-                autoCompleteView.addResultsToList(
-                  resultsList,
-                  list.list,
-                  this.resultItem
-                );
+                autoCompleteView.addResultsToList(resultsList, list.list, this.resultItem);
                 // 5- Gets user's selection
                 // If action configured
                 if (this.onSelection) {
                   // 6- Keyboard & Mouse Navigation
                   // If Navigation customMethod is set or default
                   this.resultsList.navigation
-                    ? this.resultsList.navigation(
-                        event,
-                        input,
-                        resultsList,
-                        this.onSelection,
-                        list
-                      )
-                    : autoCompleteView.navigation(
-                        input,
-                        resultsList,
-                        this.onSelection,
-                        list
-                      );
+                    ? this.resultsList.navigation(event, input, resultsList, this.onSelection, list)
+                    : autoCompleteView.navigation(input, resultsList, this.onSelection, list);
                 }
               }
             }
@@ -363,7 +320,7 @@ export default class autoComplete {
         }
         // If results will NOT be rendered
       } else if (!renderResultsList && triggerCondition) {
-        this.listMatchedResults(this.dataStream, event).then((list) => {
+        this.listMatchedResults(this.dataStream, event).then(list => {
           // Event emitter on input field
           eventEmitter(event, list);
         });
@@ -377,25 +334,20 @@ export default class autoComplete {
      *
      * @return void
      */
-    const run = (event) => {
+    const run = event => {
       // Check if data src set to be cached or NOT
       // Resolve data src before assigning and excuting
-      Promise.resolve(this.data.cache ? this.dataStream : this.data.src()).then(
-        (data) => {
-          // Assign resolved data to the main data stream
-          this.dataStream = data;
-          // Invoke execution function
-          exec(event);
-        }
-      );
+      Promise.resolve(this.data.cache ? this.dataStream : this.data.src()).then(data => {
+        // Assign resolved data to the main data stream
+        this.dataStream = data;
+        // Invoke execution function
+        exec(event);
+      });
     };
     // Updates results on input by default if navigation should be excluded
     // If option is provided as true, results will be shown on focus if input has initial text
-    this.trigger.event.forEach((eventType) => {
-      input.addEventListener(
-        eventType,
-        debounce((event) => run(event), this.debounce)
-      );
+    this.trigger.event.forEach(eventType => {
+      input.addEventListener(eventType, debounce(event => run(event), this.debounce));
     });
   }
 
@@ -408,27 +360,9 @@ export default class autoComplete {
     // Checks if data set to be cached
     if (this.data.cache) {
       // Resolve data src before assigning and igniting
-      Promise.resolve(this.data.src()).then(async (data) => {
-        //===================== First Key Stroke ====================//
-        // const source = await fetch(`https://pokeapi.co/api/v2/pokemon/`);
-        // // fetch("./db/generic.json");
-        // const data1 = await source.json();
-
-        // const source2x = await fetch(
-        //   `http://dummy.restapiexample.com/api/v1/employees`
-        // );
-        // // fetch("./db/generic.json");
-        // const data2x = await source2x.json();
-
-        // // console.log("1", data1.results);
-
-        // const finaldata = data1.results.concat(data2x.data);
-        // _this2.dataStream = data1.results;
+      Promise.resolve(this.data.src()).then(data => {
         // Assigning resolved data to the main data stream
         this.dataStream = data;
-        ///--------------- End of API Fetchig --
-
-        // this.dataStream = data;
         // Invoke ignition function
         this.ignite();
       });

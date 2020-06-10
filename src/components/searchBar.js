@@ -17,19 +17,15 @@ class SearchBar extends Component {
   componentDidMount() {
     autoComplete("https://casecomp.konnectrv.io/movie", ["title"]);
   }
-  helloThere = async e => {
-    e.preventDefault();
 
-
-
+  click = (event) => {
+    this.props.parentMethod(event);
   }
 
   render() {
     return (
       <div className="center">
-        <form onSubmit={this.helloThere}>
-
-
+        <form onSubmit={this.click}>
           <div className="contanier">
             <div className="centered-container">
               <input

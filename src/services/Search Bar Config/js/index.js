@@ -16,7 +16,7 @@ export default function AutocompleteStartup(URL, arrayOfKeys) {
       switch (event.keyCode) {
         case 13: //Enter
           //ResultCursor is the position that is highlighted
-          alert();
+
           break;
         default:
           break;
@@ -95,11 +95,11 @@ export default function AutocompleteStartup(URL, arrayOfKeys) {
     onSelection: function (feedback) {
       document.querySelector("#autoComplete").blur();
       //put as place holder the selection
-      const selection = feedback.selection.value.employee_name;
+      const selection = feedback.selection.value.title;
       // Render selected choice to selection div
       //document.querySelector(".selection").innerHTML = selection;
       // Clear Input
-      document.querySelector("#autoComplete").value = "";
+      document.querySelector("#autoComplete").value = selection;
       // Change placeholder with the selected value
       document
         .querySelector("#autoComplete")

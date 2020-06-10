@@ -37,7 +37,7 @@ class App extends Component {
             <div className="search-container">
               <div className="all-center">
 
-                <SearchBar></SearchBar>
+                <SearchBar parentMethod={this.SearchedItem}></SearchBar>
               </div>
             </div>
           </div>
@@ -66,6 +66,16 @@ class App extends Component {
       </React.Fragment>
     );
   }
+  SearchedItem = async e => {
+    e.preventDefault();
+
+    let searchedValue = document.getElementById("autoComplete").value;
+
+    console.log(1, searchedValue);
+
+
+  }
+
 }
 
 
