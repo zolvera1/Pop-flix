@@ -11,7 +11,7 @@ import Spinner from "./components/spinner";
 import Post from "./components/post";
 import Filter from "./Filter"
 import SearchBar from "./components/searchBar";
-
+import BodyLay from './components/BodyLay'
 var json = require('./services/API-data.json');
 
 
@@ -53,16 +53,7 @@ class App extends Component {
         {console.log("print")}
         <h2>Movie Collection</h2>
         <div className="post-container">
-          {this.state.data.map(movie => (
-            <LazyLoad
-              key={movie.imdb_id}
-              height={100}
-              offset={[-100, 100]}
-              placeholder={<Spinner />}
-            >
-              <Post key={movie.imdb_id} {...movie} />
-            </LazyLoad>
-          ))}
+         <BodyLay></BodyLay>
         </div>
 
 
