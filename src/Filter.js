@@ -45,7 +45,7 @@ export default class Filter extends React.Component {
             selected_ratings: [true, true, true, true], //NR, R, PG13, PG
 
             
-            selected_average: [],
+            selected_average: [0, 10],
             selected_media: [true, true], //movies, shows
 
             include_netflix: true,
@@ -224,6 +224,8 @@ export default class Filter extends React.Component {
         let reduced_watchables = [];
         let low_end = this.state.selected_average[0];
         let high_end = this.state.selected_average[1];
+        console.log(low_end); 
+        console.log(high_end); 
 
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
@@ -311,13 +313,13 @@ export default class Filter extends React.Component {
             let keep_movie = false;
             let movie_index = this.state.movies_considered[i];
             let movie_rating = this.state.movie_ratings[movie_index];
-            if (movie_rating === "NR" && this.state.include_NR) {
+            if (movie_rating.localeCompare("NR") && this.state.include_NR) {
                 keep_movie = true;
-            } else if (movie_rating === "R" && this.state.include_R) {
+            } else if (movie_rating.localeCompare("R") && this.state.include_R) {
                 keep_movie = true;
-            } else if (movie_rating === "PG-13" && this.state.include_PG13) {
+            } else if (movie_rating.localeCompare("PG-13") && this.state.include_PG13) {
                 keep_movie = true;
-            } else if (movie_rating === "PG" && this.state.include_PG) {
+            } else if (movie_rating.localeCompare("PG") && this.state.include_PG) {
                 keep_movie = true;
             }
             if (keep_movie) {
@@ -437,7 +439,7 @@ export default class Filter extends React.Component {
                 <Collapsible trigger="Vote Ratings" className="filter-head">
                     <br></br><br></br>
                     <div className='slider-box'>
-                        <Slider className="slider" defaultValue={[2,8]} min={0} max={10} step={1} marks onChange={() => this.updateScoreEndsAndApply(this.state.selected_average[0], this.state.selected_average[1])} valueLabelDisplay="on"/>
+                        <Slider className="slider" defaultValue={[0,10]} min={0} max={10} step={1} marks onChange={() => this.updateScoreEndsAndApply(this.state.selected_average[0], this.state.selected_average[1])} valueLabelDisplay="on"/>
                         </div>
                 </Collapsible>
                 <br></br>
