@@ -295,6 +295,17 @@ export default class Filter extends React.Component {
     //this.state.selected_media[movies?, shows?]
     //this.state.selected_ratings (compare it against this.state.available_ratings) (G, PG, PG-13,...)
 
+    //Ex: when dragging the score bar:
+    //update the 2-valued array, selected_average, with the new endpoints
+    //then call applyFilters
+
+    //Ex: when checking / un-checking to include movies and/or shows:
+    //update the 2-valued array, selected_media, with the new truths
+    //then call applyFilters
+
+    //Also, upon mount, available_ratings and available_services are dynamically generated sets.
+    //These sets should be used to dynamically generate the HTML options.
+
     //HTML
     render() {
         return (
@@ -314,16 +325,16 @@ export default class Filter extends React.Component {
                     <br></br>
                     <Collapsible trigger="Streaming Services" className="filter-head">
                         <label className="checkbox-label">
-                           <input id="Netflix" type="checkbox" />
+                           <input id="Netflix" type="checkbox" defaultChecked={true}/>
                             <span>Netflix</span>
                             <br></br>
-                            <input id="amazon" type='checkbox'/>
+                            <input id="amazon" type='checkbox' defaultChecked={true}/>
                             <span>Amazon Prime</span>
                             <br></br>
-                            <input id="hbo" type="checkbox" />
+                            <input id="hbo" type="checkbox" defaultChecked={true}/>
                             <span>HBO</span>
                             <br></br>
-                            <input id="hulu" type="checkbox" />
+                            <input id="hulu" type="checkbox" defaultChecked={true}/>
                             <span>Hulu</span>
                             <br></br>
                         </label>
@@ -331,26 +342,26 @@ export default class Filter extends React.Component {
                     <br></br>
                     <Collapsible trigger="Maturity Ratings" className="filter-head">
                     <label className="checkbox-label">
-                            <input id="NR" type="checkbox" />
+                            <input id="NR" type="checkbox" defaultChecked={true}/>
                             <span>NR</span>
                             <br></br>
-                            <input id="r" type="checkbox" />
+                            <input id="r" type="checkbox" defaultChecked={true}/>
                             <span>R</span>
                             <br></br>
-                            <input id="PG-13" type="checkbox" />
+                            <input id="PG-13" type="checkbox" defaultChecked={true}/>
                             <span>PG-13</span>
                             <br></br>
-                            <input id="PG" type="checkbox" />
+                            <input id="PG" type="checkbox" defaultChecked={true}/>
                             <span>PG</span>
                             <br></br>
                         </label>
                     </Collapsible>
                     <br></br>
                     <Collapsible trigger="Media Type" className="filter-head">
-                        <input id="movies" type="checkbox" />
+                        <input id="movies" type="checkbox" defaultChecked={true}/>
                         <span>Movies</span>
                         <br></br>
-                        <input id="shows" type="checkbox" />
+                        <input id="shows" type="checkbox" defaultChecked={true}/>
                         <span>TV Shows</span>
                     </Collapsible>
                     <br></br>
