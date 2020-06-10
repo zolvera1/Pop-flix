@@ -71,6 +71,15 @@ export default class Filter extends React.Component {
         return Array.from(finalSet);
     }
 
+    static reduceArr(myArray) {
+        let reducedSet = new Set();
+        let i;
+        for (i = 0; i < myArray.length; i++) {
+            reducedSet.add(myArray[i]);
+        }
+        return reducedSet;
+    }
+
     //RV API call to grab movies/shows and store their data in arrays for parsing later
     grabMoviesAndShows() {
         fetch('https://casecomp.konnectrv.io/movie') 
@@ -90,20 +99,15 @@ export default class Filter extends React.Component {
                 this.setState({ movie_pops: dataArray.map(data => data.popularity)  });
 
                 //dynamically generate which platforms are available for streaming
-                let i;
                 let movie_plats = Filter.reduceArrOfArr(this.state.movie_platforms);
-                for (i = 0; i < movie_plats.length; i++) {
-                    let a_platform = movie_plats[i];
-                    this.state.available_services.add(a_platform);
-                }
-                //console.log(this.state.available_services);
+                movie_plats.forEach(v => this.state.available_services.add(v));
 
                 //dynamically generate which maturity ratings are available
-                let ratings = Filter.reduceArrOfArr(this.state.movie_ratings);
-                for (i = 0; i < ratings.length; i++) {
-                    let a_rating = ratings[i];
-                    this.state.available_ratings.add(a_rating);
-                }
+                let ratings = Filter.reduceArr(this.state.movie_ratings);
+                ratings.forEach(v => this.state.available_ratings.add(v));
+
+                console.log(this.state.available_ratings);
+                console.log(this.state.available_services);
             }
         );
 
@@ -122,19 +126,12 @@ export default class Filter extends React.Component {
                 this.setState({ show_pops: dataArray.map(data => data.popularity)  });
 
                 //dynamically generate which platforms are available for streaming
-                let i;
                 let show_plats = Filter.reduceArrOfArr(this.state.show_platforms);
-                for (i = 0; i < show_plats.length; i++) {
-                    let a_platform = show_plats[i];
-                    this.state.available_services.add(a_platform);
-                }
+                show_plats.forEach(v => this.state.available_services.add(v));
 
                 //dynamically generate which maturity ratings are available
-                let ratings = Filter.reduceArrOfArr(this.state.show_ratings);
-                for (i = 0; i < ratings.length; i++) {
-                    let a_rating = ratings[i];
-                    this.state.available_ratings.add(a_rating);
-                }
+                let ratings = Filter.reduceArr(this.state.show_ratings);
+                ratings.forEach(v => this.state.available_ratings.add(v));
             }
         );
     }
