@@ -40,11 +40,12 @@ export default class Filter extends React.Component {
             show_genres: [],
 
             available_services: new Set(),
-            selected_services: new Set(),
+            selected_services: [true, true, true], //netflix, amazon_prime, hbo
             available_ratings: new Set(),
-            selected_ratings: new Set(),
+            selected_ratings: [true, true, true, true], //NR, R, PG13, PG
 
-            selected_average: [0, 10],
+            
+            selected_average: [],
             selected_media: [true, true], //movies, shows
 
             include_netflix: true,
@@ -107,13 +108,13 @@ export default class Filter extends React.Component {
                 let movie_plats = Filter.reduceArrOfArr(this.state.movie_platforms);
                 movie_plats.forEach(v =>
                     this.state.available_services.add(v) &&
-                    this.state.selected_services.add(v));
+                    this.state.selected_services.push(v));
 
                 //dynamically generate which maturity ratings are available
                 let ratings = Filter.reduceArr(this.state.movie_ratings);
                 ratings.forEach(v =>
                     this.state.available_ratings.add(v) &&
-                    this.state.selected_ratings.add(v));
+                    this.state.selected_ratings.push(v));
 
                 //consider all movies at first
                 let j;
@@ -140,14 +141,14 @@ export default class Filter extends React.Component {
                 //dynamically generate which platforms are available for streaming
                 let show_plats = Filter.reduceArrOfArr(this.state.show_platforms);
                 show_plats.forEach(v =>
-                    this.state.available_services.add(v) &&
-                    this.state.selected_services.add(v));
+                     this.state.available_services.add(v)); 
+                    
 
                 //dynamically generate which maturity ratings are available
                 let ratings = Filter.reduceArr(this.state.show_ratings);
                 ratings.forEach(v =>
                     this.state.available_ratings.add(v) &&
-                    this.state.selected_ratings.add(v));
+                    this.state.selected_ratings.push(v));
 
                 //consider all shows at first
                 let j;
@@ -303,6 +304,7 @@ export default class Filter extends React.Component {
         return 1;
     }
 
+
     //pg13, pg, r, nr
     async maturityFilter() {
         let i;
@@ -359,8 +361,10 @@ export default class Filter extends React.Component {
         });
     }
 
-    handleRatingsChange(event) { 
-        this.setState({selected_average: event.target.selected_average}); 
+    handleRatingsChange(event, newValue) { 
+        this.setState({selected_average: event.target.selected_average}, () => { 
+            console.log(this.state.selected_average); 
+        }); 
         // this.setState({selected_average: event.target.selected_average}, () => { 
         //     console.log(this.state.selected_average); 
         //     this.applyFilters();
@@ -368,16 +372,29 @@ export default class Filter extends React.Component {
     }
 
     //call this after checking/un-checking Service Platforms, pass in array of all checked
-    updateServicesAndApply(arrayOfSelectedServices) {
-        let i;
-        this.state.selected_services.clear();
-        for (i = 0; i < arrayOfSelectedServices.length; i++) {
-            let a_service = arrayOfSelectedServices[i];
-            if (this.state.available_services.contains(a_service)) {
-                this.state.selected_services.add(a_service);
-            }
-        }
-        this.applyFilters();
+    updateServicesAndApply(netflix, amPrime, hbo) {
+        // let i;
+        // console.log(this.state.selected_services); 
+        // //  this.state.selected_services.clear();
+        // let services = []; 
+        // // make temp array, put everything in there and set state to temp 
+        // for (i = 0; i < arrayOfSelectedServices.length; i++) {
+        //     let a_service = arrayOfSelectedServices[i];
+        //     if (this.state.available_services.has(a_service)) {
+        //         // this.state.selected_services.push(a_service);
+        //         services.push(a_service); 
+        //     }
+        // }
+        // this.setState({selected_services: services}, () => { 
+        //     console.log(this.state.selected_services); 
+        //     this.applyFilters(); 
+        // }); 
+        // //  this.applyFilters();
+
+        this.setState({selected_services: [netflix, amPrime, hbo]} , () => { 
+            console.log(this.state.selected_services); 
+            this.applyFilters(); 
+        }); 
     }
 
     //call this method after checking/un-checking whether movies and/or shows are allowed
@@ -388,16 +405,23 @@ export default class Filter extends React.Component {
         });
     }
 
-    updateRatingsAndApply(arrayOfSelectedRatings) {
-        let i;
-        this.state.selected_ratings.clear();
-        for (i = 0; i < arrayOfSelectedRatings.length; i++) {
-            let a_rating = arrayOfSelectedRatings[i];
-            if (this.state.available_ratings.contains(a_rating)) {
-                this.state.selected_ratings.add(a_rating);
-            }
-        }
-        this.applyFilters();
+
+
+    updateRatingsAndApply(nr, r, pg13, pg) {
+        // let i;
+        // this.state.selected_ratings.clear();
+        // for (i = 0; i < arrayOfSelectedRatings.length; i++) {
+        //     let a_rating = arrayOfSelectedRatings[i];
+        //     if (this.state.available_ratings.contains(a_rating)) {
+        //         this.state.selected_ratings.add(a_rating);
+        //     }
+        // }
+        //  this.applyFilters();
+        this.setState({selected_ratings: [nr, r, pg13, pg]}, () => { 
+            console.log(this.state.selected_ratings); 
+            this.applyFilters(); 
+        }); 
+
     }
 
     //call grabAvailableServices() to get set of services that can be options (use this to dynamically write HTML)
@@ -418,39 +442,36 @@ export default class Filter extends React.Component {
                 <Collapsible trigger="Vote Ratings" className="filter-head">
                     <br></br><br></br>
                     <div className='slider-box'>
-                        <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={(e) => this.handleRatingsChange(e)} valueLabelDisplay="on"/>
+                        <Slider className="slider" defaultValue={[2,8]} min={0} max={10} step={1} marks onChange={() => this.updateScoreEndsAndApply(this.state.selected_average[0], this.state.selected_average[1])} valueLabelDisplay="on"/>
                         </div>
                 </Collapsible>
                 <br></br>
                 <Collapsible trigger="Streaming Services" className="filter-head">
                     <label className="checkbox-label">
-                        <input id="Netflix" type="checkbox" defaultChecked={true}/> 
+                        <input id="Netflix" type="checkbox" defaultChecked={true} onChange ={() => this.updateServicesAndApply(!this.state.selected_services[0], this.state.selected_services[1], this.state.selected_services[2])} /> 
                         <span>Netflix</span>
                         <br></br>
-                        <input id="amazon" type='checkbox' defaultChecked={true}/>
+                        <input id="amazon" type='checkbox' defaultChecked={true} onChange ={() => this.updateServicesAndApply(this.state.selected_services[0], !this.state.selected_services[1], this.state.selected_services[2])}/>
                         <span>Amazon Prime</span>
                         <br></br>
-                        <input id="hbo" type="checkbox" defaultChecked={true}/>
+                        <input id="hbo" type="checkbox" defaultChecked={true} onChange ={() => this.updateServicesAndApply(this.state.selected_services[0], this.state.selected_services[1], !this.state.selected_services[2])}/>
                         <span>HBO</span>
-                        <br></br>
-                        <input id="hulu" type="checkbox" defaultChecked={true}/>
-                        <span>Hulu</span>
                         <br></br>
                     </label>
                 </Collapsible>
                 <br></br>
                 <Collapsible trigger="Maturity Ratings" className="filter-head">
                 <label className="checkbox-label">
-                        <input id="NR" type="checkbox" defaultChecked={false}/>
+                        <input id="NR" type="checkbox" defaultChecked={true} onChange ={()=>this.updateRatingsAndApply(!this.state.selected_ratings[0], this.state.selected_ratings[1], this.state.selected_ratings[2], this.state.selected_ratings[3])}/>
                         <span>NR</span>
                         <br></br>
-                        <input id="r" type="checkbox" defaultChecked={false}/>
+                        <input id="r" type="checkbox" defaultChecked={true}onChange ={()=>this.updateRatingsAndApply(this.state.selected_ratings[0], !this.state.selected_ratings[1], this.state.selected_ratings[2], this.state.selected_ratings[3])}/>
                         <span>R</span>
                         <br></br>
-                        <input id="PG-13" type="checkbox" defaultChecked={false}/>
+                        <input id="PG-13" type="checkbox" defaultChecked={true} onChange ={()=>this.updateRatingsAndApply(this.state.selected_ratings[0], this.state.selected_ratings[1], !this.state.selected_ratings[2], this.state.selected_ratings[3])}/>
                         <span>PG-13</span>
                         <br></br>
-                        <input id="PG" type="checkbox" defaultChecked={false}/>
+                        <input id="PG" type="checkbox" defaultChecked={true} onChange ={()=>this.updateRatingsAndApply(this.state.selected_ratings[0], this.state.selected_ratings[1], this.state.selected_ratings[2], !this.state.selected_ratings[3])}/>
                         <span>PG</span>
                         <br></br>
                     </label>
@@ -466,7 +487,7 @@ export default class Filter extends React.Component {
                 <br></br>
             {/* </div> */}
         </div>
-        {/* {document.write(<h1>hello</h1>)} */}
+        {/* {console.log(this.state.available_services)} */}
     </div>
         )
    } 
