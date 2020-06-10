@@ -182,10 +182,10 @@ export default class Filter extends React.Component {
         this.setState({ movies_considered: movies_considered_reset }, async () => {
             this.setState({ shows_considered: shows_considered_reset }, async () => {
                 //each of these methods reduce this.state.movies_considered and this.state.shows_considered
-                await this.scoreFilter();
+                await this.maturityFilter();
                 await this.serviceFilter();
                 await this.mediaTypeFilter();
-                await this.maturityFilter();
+                await this.scoreFilter();
 
                 console.log("movies: " + this.state.movies_considered);
                 console.log("shows: " + this.state.shows_considered);
