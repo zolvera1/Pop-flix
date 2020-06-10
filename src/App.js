@@ -4,21 +4,12 @@ import "./styles.css";
 import "./services/Search Bar Config/css/autoCompleteHome.css";
 import "./css/search.css";
 import "./App.css";
-
 import NavBar from "./components/navbar";
-import background from "./images/aqua-man.jpg";
-
 import LazyLoad from "react-lazyload";
 import "./css/lazy.css";
 import Spinner from "./components/spinner";
 import Post from "./components/post";
-
-import data from "./services/data";
-
-
 import Filter from "./Filter"
-
-
 import SearchBar from "./components/searchBar";
 
 var json = require('./services/API-data.json');
@@ -39,16 +30,21 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <img src={background} id="aqua" alt="hello"></img>
-        <NavBar></NavBar>
-        <div className="App">
-          <div className="all-center">
-            <SearchBar></SearchBar>
+        {/* <img src={background} id="aqua" alt="hello"></img> */}
+        <div className="header-container">
+          <NavBar></NavBar>
+          <div className="App">
+            <div className="search-container">
+              <div className="all-center">
+
+                <SearchBar></SearchBar>
+              </div>
+            </div>
           </div>
-
-          <Filter />
-
         </div>
+        <Filter />
+
+
 
 
         <h2>LazyLoad Demo</h2>

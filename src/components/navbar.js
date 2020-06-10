@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 
 import "../css/navbar.css";
+import logo from "../images/popflixLogo.png";
 
 class NavBar extends Component {
   constructor(props) {
@@ -13,83 +14,51 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
-    let menuButton = document.querySelector(".kad-menu-button");
-    let navItems = document.querySelector(".kad-nav");
-    let barHide = document.querySelector(".kad-menu-bar-two");
-    let barLeft = document.querySelector(".kad-menu-bar-one");
-    let barRight = document.querySelector(".kad-menu-bar-three");
 
-    menuButton.onclick = openMenu;
+    const toggleCollapse = document.querySelector('.toggle-collapse span');
+    const nav = document.querySelector('.nav');
 
-    function openMenu() {
-      navItems.classList.toggle("toggle-kad-nav");
-      barHide.classList.toggle("hide-bar-two");
-      barLeft.classList.toggle("cross-bar-one");
-      barRight.classList.toggle("cross-bar-three");
+
+    // onclick event on toggle Collapse span tag
+    toggleCollapse.onclick = (e) => {
+      nav.classList.toggle("collapse");
+      e.target.classList.toggle("toggle-click");
     }
+
   }
 
   render() {
     return (
       <React.Fragment>
-        <header className="kad-header">
-          <div className="kad-mobile-container">
-            <div className="kad-header-logo">
-              <span className="kad-link" id="logo" title="kadnavbar">
-                Pop-flix
-              </span>
-            </div>
-
-            <div className="kad-menu-button">
-              <div className="kad-menu-bar kad-menu-bar-one"></div>
-              <div className="kad-menu-bar kad-menu-bar-two"></div>
-              <div className="kad-menu-bar kad-menu-bar-three"></div>
+        <nav className="nav flex-row" style={{ padding: "10px" }}>
+          <div className="nav-menu">
+            <div className="nav-brand " style={{ marginTop: "0" }}>
+              <a href="#" className="text-black " style={{ marginTop: "0" }}><img className="logo"
+                src={logo} /></a>
             </div>
           </div>
+          <div className="toggle-collapse">
+            <div className="toggle-icons text-black">
 
-          <nav className="kad-nav">
-            <ul className="kad-nav-list">
-              <li className="kad-nav-list-item">
-                <span className="kad-link kad-list-link">Home</span>
-              </li>
-              <li className="kad-nav-list-item">
-                <span className="kad-link kad-list-link">Features</span>
-              </li>
-              <li className="kad-nav-list-item">
-                <span className="kad-link kad-list-link">Documentation</span>
-              </li>
-              <li className="kad-nav-list-item">
-                <span className="kad-link kad-list-link">Contribute</span>
-              </li>
-              <li className="kad-nav-list-item">
-                <span className="kad-link kad-list-link">Report issue</span>
-              </li>
-            </ul>
-
-            <div className="kad-nav-extras">
-              <button className="kad-nav-button">
-                <span className="kad-link kad-list-link">Download</span>
-              </button>
-              <div className="kad-nav-icons">
-                <a href="https://github.com/kadetXx" title="github">
-                  <i className="fab fa-github"></i>
-                </a>
-                <a href="https://twitter.com/kadetXx" title="twitter">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="https://codepen.io/kadetXx/" title="codepen">
-                  <i className="fab fa-codepen"></i>
-                </a>
-                <a href="https://twitter.com/kadetXx" title="twitter">
-                  <i className="fas fa-hashtag"></i>
-                </a>
-                <a href=" mailto:techkadet@gmail.com" title="send an email">
-                  <i className="fas fa-envelope"></i>
-                </a>
-              </div>
+              <span className="icon"></span>
             </div>
-          </nav>
-        </header>
+          </div>
+          <div>
+            <ul className="nav-items flex-row">
+
+            </ul>
+          </div>
+          <div className="social text-black">
+
+            <a href="#" className="icons-x"><i className="fab fa-facebook-f"></i></a>
+
+            <a href="https://github.com/zolvera1/Pop-flix" className="icons-x"><i className="fab fa-github"></i></a>
+
+            <a href="#" className="icons-x"><i className="fab fa-instagram"></i></a>
+
+            <a href="#" className="icons-x"><i className="fab fa-youtube"></i></a>
+          </div>
+        </nav>
       </React.Fragment>
     );
   }
