@@ -218,6 +218,17 @@ export default class Filter extends React.Component {
         return returnArray;
     }
 
+    grabFilteredAll() {
+        let finalArray = this.grabFilteredMovies();
+        let newArray = this.grabFilteredShows();
+        let i;
+        for (i = 0; i < newArray.length; i++) {
+            let show = newArray[i];
+            finalArray.push(show);
+        }
+        return finalArray;
+    }
+
     //ratings 0 through 10
     async scoreFilter() {
         let i;
@@ -253,6 +264,8 @@ export default class Filter extends React.Component {
         let i;
         let reduced_watchables_m = [];
 
+        console.log(this.state.available_services);
+
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
             let services_available = this.state.movie_platforms[movie_index];
@@ -261,7 +274,7 @@ export default class Filter extends React.Component {
                 movie_available = true;
             } else if (services_available.includes("amazon_prime") && this.state.include_prime) {
                 movie_available = true;
-            } else if (services_available.includes("hbo" && this.state.include_hbo)) {
+            } else if (services_available.includes("hbo") && this.state.include_hbo) {
                 movie_available = true;
             }
             if (movie_available) {
@@ -279,7 +292,7 @@ export default class Filter extends React.Component {
                 show_available = true;
             } else if (services_available.includes("amazon_prime") && this.state.include_prime) {
                 show_available = true;
-            } else if (services_available.includes("hbo" && this.state.include_hbo)) {
+            } else if (services_available.includes("hbo") && this.state.include_hbo) {
                 show_available = true;
             }
             if (show_available) {
@@ -361,16 +374,6 @@ export default class Filter extends React.Component {
             console.log(this.state.selected_average); 
             this.applyFilters();
         });
-    }
-
-    handleRatingsChange(event, newValue) { 
-        this.setState({selected_average: event.target.selected_average}, () => { 
-            console.log(this.state.selected_average); 
-        }); 
-        // this.setState({selected_average: event.target.selected_average}, () => { 
-        //     console.log(this.state.selected_average); 
-        //     this.applyFilters();
-        // }); 
     }
 
     //call this after checking/un-checking Service Platforms, pass in array of all checked
