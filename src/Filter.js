@@ -48,6 +48,14 @@ export default class Filter extends React.Component {
             selected_average: [],
             selected_media: [true, true], //movies, shows
 
+            include_netflix: true,
+            include_prime: true,
+            include_hbo: true,
+
+            include_NR: true,
+            include_R: true,
+            include_PG13: true,
+            include_PG: true
         };
         this.handleClick = this.handleClick.bind(this); 
     }
@@ -246,14 +254,13 @@ export default class Filter extends React.Component {
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
             let services_available = this.state.movie_platforms[movie_index];
-            let j;
             let movie_available = false;
-            for (j = 0; j < services_available.length; j++) {
-                let a_platform = services_available[j];
-                //console.log(this.state.selected_services);
-                if (this.state.selected_services.includes(a_platform)) {
-                    movie_available = true;
-                }
+            if (services_available.includes("netflix") && this.state.include_netflix) {
+                movie_available = true;
+            } else if (services_available.includes("amazon_prime") && this.state.include_prime) {
+                movie_available = true;
+            } else if (services_available.includes("hbo" && this.state.include_hbo)) {
+                movie_available = true;
             }
             if (movie_available) {
                 reduced_watchables.push(this.state.movies_considered[movie_index]);
@@ -263,16 +270,15 @@ export default class Filter extends React.Component {
         reduced_watchables = [];
 
         for (i = 0; i < this.state.shows_considered.length; i++) {
-            let show_index = this.state.movies_considered[i];
-
+            let show_index = this.state.shows_considered[i];
             let services_available = this.state.show_platforms[show_index];
-            let j;
             let show_available = false;
-            for (j = 0; j < services_available.length; j++) {
-                let a_platform = services_available[j];
-                if (this.state.selected_services.includes(a_platform)) {
-                    show_available = true;
-                }
+            if (services_available.includes("netflix") && this.state.include_netflix) {
+                show_available = true;
+            } else if (services_available.includes("amazon_prime") && this.state.include_prime) {
+                show_available = true;
+            } else if (services_available.includes("hbo" && this.state.include_hbo)) {
+                show_available = true;
             }
             if (show_available) {
                 reduced_watchables.push(this.state.shows_considered[show_index]);
@@ -300,22 +306,36 @@ export default class Filter extends React.Component {
     async maturityFilter() {
         let i;
         let reduced_watchables = [];
+        //only push movies if they match our requested maturity ratings
         for (i = 0; i < this.state.movies_considered.length; i++) {
+            let keep_movie = false;
             let movie_index = this.state.movies_considered[i];
-            if (this.state.selected_ratings.contains(this.state.movie_ratings[movie_index])) {
+            let movie_rating = this.state.movie_ratings[movie_index];
+            if (movie_rating === "NR" && this.state.include_NR) {
+                keep_movie = true;
+            } else if (movie_rating === "R" && this.state.include_R) {
+                keep_movie = true;
+            } else if (movie_rating === "PG-13" && this.state.include_PG13) {
+                keep_movie = true;
+            } else if (movie_rating === "PG" && this.state.include_PG) {
+                keep_movie = true;
+            }
+            if (keep_movie) {
                 reduced_watchables.push(movie_index);
             }
         }
         this.setState({ movies_considered: reduced_watchables});
         reduced_watchables = [];
 
-        for (i = 0; i < this.state.shows_considered.length; i++) {
-            let show_index = this.state.shows_considered[i];
-            if (this.state.selected_ratings.has(this.state.show_ratings[show_index])) {
+        //only push the shows if non of the ratings are selected
+        if (!(this.state.include_NR || this.state.include_R || this.state.include_PG13 || this.state.include_PG)) {
+            for (i = 0; i < this.state.shows_considered.length; i++) {
+                let show_index = this.state.shows_considered[i];
                 reduced_watchables.push(show_index);
             }
+
+            this.setState({ shows_considered: reduced_watchables });
         }
-        this.setState({ shows_considered: reduced_watchables });
 
         return 1;
     }
