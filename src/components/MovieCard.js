@@ -1,29 +1,66 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Card } from 'react-bootstrap'
+import React, { Component } from 'react';
 
-const MovieCard = (props) => (
-    
-    <Card key= {props.movie.id} className="movie-card" style= {{height: '100%'}}>
-            <Card.Img variant="top"  src={`https://image.tmdb.org/t/p/w500/${props.movie.poster_path}`} alt=""/>
-            <Card.Body> 
-                <Card.Title>{props.movie.original_title} </Card.Title>
-                <Card.Text className= "movie-text"> 
-                    {props.movie.overview}
-                </Card.Text>
-           </Card.Body>
-           <Card.Footer>
-               <small className ="text-muted"> Rated: {props.movie.vote_average}/10</small>
-           </Card.Footer>
-    </Card>
-);
+import { Card } from 'react-bootstrap'
+var json = require('../services/API-data.json');
 
-MovieCard.defaultProps = {
-    movie: {}
-};
+class MovieCard extends Component {
+    constructor(props) {
+        super(props);
 
-MovieCard.propTypes = {
-    movie: PropTypes.object
-};
+        this.state = {
+            jsonData: null,
+            searchValue: null
+        };
+    }
+
+    // Update the document title using the browser API
+
+
+    componentDidMount() {
+        let jsonMovies = json.find(x => x.imdb_id === this.props.movie.imdb);
+
+
+        this.setState({ jsonData: jsonMovies }, () => {
+
+            try {
+
+                document.getElementById(this.props.movie.imdb).src = `https://image.tmdb.org/t/p/w500${this.state.jsonData.poster_path}`;
+            }
+            catch (err) {
+
+
+                // setTimeout(function () {
+                //     document.getElementById(this.props.imdb).src = `https://image.tmdb.org/t/p/w500${this.state.jsonData.poster_path}`;
+                // }, 10000);
+            }
+
+        })
+
+    }
+    render() {
+        return (
+            <Card key={this.props.movie.id} className="movie-card" style={{ height: '100%' }}>
+                <Card.Img variant="top" id={this.props.movie.imdb} alt="" />
+                <Card.Body>
+                    <Card.Title>{this.props.movie.original_title} </Card.Title>
+                    <Card.Text className="movie-text">
+                        {this.props.movie.overview}
+                    </Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                    <small className="text-muted"> Rated: {this.props.movie.vote_average}/10</small>
+                </Card.Footer>
+            </Card>);
+    }
+}
+
+
+// MovieCard.defaultProps = {
+//     movie: {}
+// };
+
+// MovieCard.propTypes = {
+//     movie: PropTypes.object
+// };
 
 export default MovieCard;

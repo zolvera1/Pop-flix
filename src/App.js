@@ -5,10 +5,9 @@ import "./services/Search Bar Config/css/autoCompleteHome.css";
 import "./css/search.css";
 import "./App.css";
 import NavBar from "./components/navbar";
-import LazyLoad from "react-lazyload";
+
 import "./css/lazy.css";
-import Spinner from "./components/spinner";
-import Post from "./components/post";
+
 import Filter from "./Filter"
 import SearchBar from "./components/searchBar";
 import BodyLay from './components/BodyLay'
@@ -27,13 +26,26 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.setState({ data: json })
+    //this.setState({ data: json })
+
+    fetch('https://casecomp.konnectrv.io/movie')
+      .then(response => response.json())
+      .then(dataArray => {
+
+
+
+        this.setState({ data: dataArray });
+        // console.log(dataArray);
+      }
+      );
+
+
   }
 
   render() {
     return (
       <React.Fragment>
-        {/* <img src={background} id="aqua" alt="hello"></img> */}
+
         <div className="header-container">
           <NavBar></NavBar>
           <div className="App">
@@ -46,14 +58,18 @@ class App extends Component {
           </div>
         </div>
         <Filter />
-        
+
 
 
 
         {console.log("print")}
         <h2>Movie Collection</h2>
         <div className="post-container">
-         <BodyLay></BodyLay>
+
+
+
+          <BodyLay values={this.state.data}></BodyLay>
+
         </div>
 
 
@@ -77,7 +93,7 @@ class App extends Component {
 
     this.setState({ data: jsonMovies })
 
-    console.log(1, jsonMovies);
+
 
 
   }
