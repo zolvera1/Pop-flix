@@ -289,22 +289,57 @@ export default class Filter extends React.Component {
         this.setState({ shows_considered: reduced_watchables });
     }
 
-    //variables to update with GUI interaction:
-    //this.state.selected_average[low_end, high_end] (this is the "user" score)
-    //this.state.selected_services (compare it against this.state.available_services)
-    //this.state.selected_media[movies?, shows?]
-    //this.state.selected_ratings (compare it against this.state.available_ratings) (G, PG, PG-13,...)
+    grabAvailableServices() {
+        return this.state.available_services;
+    }
 
-    //Ex: when dragging the score bar:
-    //update the 2-valued array, selected_average, with the new endpoints
-    //then call applyFilters
+    grabAvailableRatings() {
+        return this.state.available_ratings;
+    }
 
-    //Ex: when checking / un-checking to include movies and/or shows:
-    //update the 2-valued array, selected_media, with the new truths
-    //then call applyFilters
+    //call this method in the dual-ranged bar for movie/show scores
+    updateScoreEndsAndApply(low_end, high_end) {
+        this.setState({ selected_average: [low_end, high_end] });
+        this.applyFilters();
+    }
 
-    //Also, upon mount, available_ratings and available_services are dynamically generated sets.
-    //These sets should be used to dynamically generate the HTML options.
+    //call this after checking/un-checking Service Platforms, pass in array of all checked
+    updateServicesAndApply(arrayOfSelectedServices) {
+        let i;
+        this.state.selected_services.clear();
+        for (i = 0; i < arrayOfSelectedServices.length; i++) {
+            let a_service = arrayOfSelectedServices[i];
+            if (this.state.available_services.contains(a_service)) {
+                this.state.selected_services.add(a_service);
+            }
+        }
+        this.applyFilters();
+    }
+
+    //call this method after checking/un-checking whether movies and/or shows are allowed
+    updateMediaAndApply(movies_allowed, shows_allowed) {
+        this.setState({ selected_media: [movies_allowed, shows_allowed] });
+        this.applyFilters();
+    }
+
+    updateRatingsAndApply(arrayOfSelectedRatings) {
+        let i;
+        this.state.selected_ratings.clear();
+        for (i = 0; i < arrayOfSelectedRatings.length; i++) {
+            let a_rating = arrayOfSelectedRatings[i];
+            if (this.state.available_ratings.contains(a_rating)) {
+                this.state.selected_ratings.add(a_rating);
+            }
+        }
+        this.applyFilters();
+    }
+
+    //call grabAvailableServices() to get set of services that can be options (use this to dynamically write HTML)
+    //call grabAvailableRatings() to get set of maturity ratings that can be options (use for dynamic HTML as well)
+    //call updateScoreEndsAndApply([float] new_low, [float] new_high) to set new score endpoints and apply them
+    //call updateServicesAndApply([Array] SelectedServices) to set which services to include and apply them
+    //call updateMediaAndApply([bool] movies_allowed, [bool] shows_allowed) to set if movies and/or shows are included
+    //call updateRatingsAndApply([Array] SelectedRatings) to set which maturity ratings to include and apply them
 
     //HTML
     render() {
