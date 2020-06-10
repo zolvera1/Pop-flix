@@ -58,12 +58,13 @@ class App extends Component {
           </div>
         </div>
         <Filter />
+        <hr></hr>
 
 
 
 
         {console.log("print")}
-        <h2>Movie Collection</h2>
+        <h1 className="movie-header">Movie Collection</h1>
         <div className="post-container">
 
 

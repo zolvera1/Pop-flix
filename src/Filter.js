@@ -57,7 +57,7 @@ export default class Filter extends React.Component {
             include_PG13: true,
             include_PG: true
         };
-        this.handleClick = this.handleClick.bind(this); 
+        // this.handleClick = this.handleClick.bind(this); 
     }
 
     componentDidMount() {
@@ -159,15 +159,6 @@ export default class Filter extends React.Component {
         );
     }
 
-    handleRatingsChange(event) { 
-        this.setState({ratingsValue: event.target.ratingsValue}); 
-    }
-
-    handleClick(e) { 
-        e.preventDefault(); 
-        this.setState(prevState => ({isFlipped: !prevState.isFlipped})); 
-    }
-
     //apply all of the filters the user has selected
     applyFilters() {
         let i = 0;
@@ -185,10 +176,10 @@ export default class Filter extends React.Component {
         this.setState({ movies_considered: movies_considered_reset }, async () => {
             this.setState({ shows_considered: shows_considered_reset }, async () => {
                 //each of these methods reduce this.state.movies_considered and this.state.shows_considered
-                await this.scoreFilter();
+                await this.maturityFilter();
                 await this.serviceFilter();
                 await this.mediaTypeFilter();
-                await this.maturityFilter();
+                await this.scoreFilter();
 
                 console.log(this.grabFilteredMovies().length);
                 console.log(this.grabFilteredShows().length);
@@ -240,8 +231,6 @@ export default class Filter extends React.Component {
 
         let low_end = this.state.selected_average[0];
         let high_end = this.state.selected_average[1];
-        console.log(low_end); 
-        console.log(high_end); 
 
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
@@ -377,7 +366,7 @@ export default class Filter extends React.Component {
     }
 
     //call this method in the dual-ranged bar for movie/show scores
-    updateScoreEndsAndApply(low_end, high_end) { 
+    updateScoreEndsAndApply(low_end,high_end) { 
         this.setState({ selected_average: [low_end, high_end] }, () => {
             console.log(this.state.selected_average); 
             this.applyFilters();
@@ -419,7 +408,13 @@ export default class Filter extends React.Component {
         
     } 
 
-    
+    handleChange(event, newValue) { 
+        // console.log(newValue);
+         this.setState({selected_average: newValue}, () => {
+            console.log(this.state.selected_average); 
+        this.applyFilters(); 
+         });
+    }
 
     //call grabAvailableServices() to get set of services that can be options (use this to dynamically write HTML)
     //call grabAvailableRatings() to get set of maturity ratings that can be options (use for dynamic HTML as well)
@@ -433,13 +428,12 @@ export default class Filter extends React.Component {
     return (
     <div className="main">
         <div className="nav-filters">
-            {/* <div className="sort"> */}
                 <h3 className='filter-header'>Filter by...</h3>
                 <hr></hr>
                 <Collapsible trigger="Vote Ratings" className="filter-head">
                     <br></br><br></br>
                     <div className='slider-box'>
-                        <Slider className="slider" defaultValue={[0,10]} min={0} max={10} step={1} marks onChange={() => this.updateScoreEndsAndApply(this.state.selected_average[0], this.state.selected_average[1])} valueLabelDisplay="on"/>
+                        <Slider className="slider" defaultValue={[0,10]} min={0} max={10} step={0.5} marks onChange={ (event, newValue) => this.handleChange(event, newValue)} valueLabelDisplay="on"/>
                         </div>
                 </Collapsible>
                 <br></br>
@@ -482,9 +476,7 @@ export default class Filter extends React.Component {
                     <span>TV Shows</span>
                 </Collapsible>
                 <br></br>
-            {/* </div> */}
         </div>
-        {/* {console.log(this.state.available_services)} */}
     </div>
         )
    } 

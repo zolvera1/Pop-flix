@@ -37,16 +37,12 @@
   display: flex;
   justify-content: space-around;
   padding: 25px; 
-  /* border: dotted 2px black;   */
   width: 100%; 
 }
 .filter-head {
   font-weight: bold;
   font-size: 16px;
   padding: 12px; 
-  /* display: flex;
-  justify-content: space-around;   */
-
 }
 
 .main {
@@ -67,4 +63,8 @@
 
 .Collapsible__contentOuter { 
   padding: 3px; 
+}
+
+.movie-header { 
+  text-align: center; 
 }
