@@ -25,7 +25,7 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="center">
-        <form onSubmit={this.click}>
+        <form id="search-form" onSubmit={this.click}>
           <div className="contanier">
             <div className="centered-container">
               <input

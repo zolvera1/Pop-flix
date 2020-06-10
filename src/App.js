@@ -11,7 +11,7 @@ import Spinner from "./components/spinner";
 import Post from "./components/post";
 import Filter from "./Filter"
 import SearchBar from "./components/searchBar";
-
+import BodyLay from './components/BodyLay'
 var json = require('./services/API-data.json');
 
 
@@ -25,7 +25,10 @@ class App extends Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+
+    this.setState({ data: json })
+  }
 
   render() {
     return (
@@ -50,16 +53,7 @@ class App extends Component {
         {console.log("print")}
         <h2>Movie Collection</h2>
         <div className="post-container">
-          {json.map(movie => (
-            <LazyLoad
-              key={movie.imdb_id}
-              height={100}
-              offset={[-100, 100]}
-              placeholder={<Spinner />}
-            >
-              <Post key={movie.imdb_id} {...movie} />
-            </LazyLoad>
-          ))}
+         <BodyLay></BodyLay>
         </div>
 
 
@@ -72,7 +66,18 @@ class App extends Component {
 
     let searchedValue = document.getElementById("autoComplete").value;
 
-    console.log(1, searchedValue);
+    const source = await fetch("https://casecomp.konnectrv.io/movie");
+    const data = await source.json();
+    let movieObject = [];
+    movieObject.push(data.find(x => x.title === searchedValue));
+
+
+    let jsonMovies = [];
+    jsonMovies.push(json.find(x => x.imdb_id === movieObject[0].imdb));
+
+    this.setState({ data: jsonMovies })
+
+    console.log(1, jsonMovies);
 
 
   }
