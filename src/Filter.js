@@ -47,7 +47,6 @@ export default class Filter extends React.Component {
             selected_average: [0, 10],
             selected_media: [true, true], //movies, shows
 
-            ratingsValue: [2,8],
             isFlipped:false
         };
         this.handleClick = this.handleClick.bind(this); 
@@ -329,10 +328,19 @@ export default class Filter extends React.Component {
     }
 
     //call this method in the dual-ranged bar for movie/show scores
-    updateScoreEndsAndApply(low_end, high_end) {
+    updateScoreEndsAndApply(low_end, high_end) { 
         this.setState({ selected_average: [low_end, high_end] }, () => {
+            console.log(this.state.selected_average); 
             this.applyFilters();
         });
+    }
+
+    handleRatingsChange(event) { 
+        this.setState({selected_average: event.target.selected_average}); 
+        // this.setState({selected_average: event.target.selected_average}, () => { 
+        //     console.log(this.state.selected_average); 
+        //     this.applyFilters();
+        // }); 
     }
 
     //call this after checking/un-checking Service Platforms, pass in array of all checked
@@ -351,7 +359,7 @@ export default class Filter extends React.Component {
     //call this method after checking/un-checking whether movies and/or shows are allowed
     updateMediaAndApply(movies_allowed, shows_allowed) {
         this.setState({ selected_media: [movies_allowed, shows_allowed] }, () => {
-            console.log(this.state.selected_media);
+            console.log(this.state.selected_average);
             this.applyFilters();
         });
     }
@@ -386,13 +394,13 @@ export default class Filter extends React.Component {
                 <Collapsible trigger="Vote Ratings" className="filter-head">
                     <br></br><br></br>
                     <div className='slider-box'>
-                        <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
+                        <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={(e) => this.handleRatingsChange(e)} valueLabelDisplay="on"/>
                         </div>
                 </Collapsible>
                 <br></br>
                 <Collapsible trigger="Streaming Services" className="filter-head">
                     <label className="checkbox-label">
-                        <input id="Netflix" type="checkbox" defaultChecked={true}/>
+                        <input id="Netflix" type="checkbox" defaultChecked={true}/> 
                         <span>Netflix</span>
                         <br></br>
                         <input id="amazon" type='checkbox' defaultChecked={true}/>
@@ -409,26 +417,26 @@ export default class Filter extends React.Component {
                 <br></br>
                 <Collapsible trigger="Maturity Ratings" className="filter-head">
                 <label className="checkbox-label">
-                        <input id="NR" type="checkbox" defaultChecked={true}/>
+                        <input id="NR" type="checkbox" defaultChecked={false}/>
                         <span>NR</span>
                         <br></br>
-                        <input id="r" type="checkbox" defaultChecked={true}/>
+                        <input id="r" type="checkbox" defaultChecked={false}/>
                         <span>R</span>
                         <br></br>
-                        <input id="PG-13" type="checkbox" defaultChecked={true}/>
+                        <input id="PG-13" type="checkbox" defaultChecked={false}/>
                         <span>PG-13</span>
                         <br></br>
-                        <input id="PG" type="checkbox" defaultChecked={true}/>
+                        <input id="PG" type="checkbox" defaultChecked={false}/>
                         <span>PG</span>
                         <br></br>
                     </label>
                 </Collapsible>
                 <br></br>
                 <Collapsible trigger="Media Type" className="filter-head">
-                <input id="movies" type="checkbox" defaultChecked={true} onChange={() => this.updateMediaAndApply(true, false)}/>
+                <input id="movies" type="checkbox" defaultChecked={true} onChange={() => this.updateMediaAndApply(!this.state.selected_media[0], this.state.selected_media[1])}/>
                     <span>Movies</span>
                     <br></br>
-                    <input id="shows" type="checkbox" defaultChecked={true}  onChange={()=>this.updateMediaAndApply(false, true)}/>
+                    <input id="shows" type="checkbox" defaultChecked={true}  onChange={()=>this.updateMediaAndApply(this.state.selected_media[0],!this.state.selected_media[1])}/>
                     <span>TV Shows</span>
                 </Collapsible>
                 <br></br>
