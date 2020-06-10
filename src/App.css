@@ -33,24 +33,9 @@
   }
 }
 
-.topnav {
-  display: flex;
-  justify-content: flex-end;
-  padding: 25px;
-  background-color: lightgray;
-}
-
-.topnav input[type="text"] {
-  float: left;
-  padding: 6px;
-  margin-top: 8px;
-  font-size: 16px;
-}
-
 .nav-filters {
   display: flex;
-  justify-content: left;
-  width: 250px;
+  justify-content: center;
   padding: 25px; 
 }
 .filter-head {

@@ -1,9 +1,9 @@
+// eslint-disable-next-line no-console
+
 import React, { useEffect } from 'react';
 import Collapsible from "react-collapsible";
-import { Card } from "react-bootstrap";
 import "./App.css"; 
 import Slider from '@material-ui/core/Slider';
-import ReactCardFlip from "react-card-flip"; 
 
 
 export default class Filter extends React.Component {
@@ -321,7 +321,8 @@ export default class Filter extends React.Component {
     //call this method after checking/un-checking whether movies and/or shows are allowed
     updateMediaAndApply(movies_allowed, shows_allowed) {
         this.setState({ selected_media: [movies_allowed, shows_allowed] });
-        this.applyFilters();
+        console.log("checked");
+        // this.applyFilters();
     }
 
     updateRatingsAndApply(arrayOfSelectedRatings) {
@@ -345,81 +346,66 @@ export default class Filter extends React.Component {
 
     //HTML
     render() {
-        return (
+    return (
             
-            <div className="main">
-            <div style={{ height: "140px" }}></div> 
-            <div className="nav-filters">
-                <div className="sort">
-                    <h3>Filter by...</h3>
-                    <hr></hr>
-                    <Collapsible trigger="Vote Ratings" className="filter-head">
-                        <br></br><br></br>
-                        <div className='slider-box'>
-                            <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
-                            </div>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Streaming Services" className="filter-head">
-                        <label className="checkbox-label">
-                           <input id="Netflix" type="checkbox" defaultChecked={true}/>
-                            <span>Netflix</span>
-                            <br></br>
-                            <input id="amazon" type='checkbox' defaultChecked={true}/>
-                            <span>Amazon Prime</span>
-                            <br></br>
-                            <input id="hbo" type="checkbox" defaultChecked={true}/>
-                            <span>HBO</span>
-                            <br></br>
-                            <input id="hulu" type="checkbox" defaultChecked={true}/>
-                            <span>Hulu</span>
-                            <br></br>
-                        </label>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Maturity Ratings" className="filter-head">
+    <div className="main">
+        <div className="nav-filters">
+            <div className="sort">
+                <h3>Filter by...</h3>
+                <hr></hr>
+                <Collapsible trigger="Vote Ratings" className="filter-head">
+                    <br></br><br></br>
+                    <div className='slider-box'>
+                        <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
+                        </div>
+                </Collapsible>
+                <br></br>
+                <Collapsible trigger="Streaming Services" className="filter-head">
                     <label className="checkbox-label">
-                            <input id="NR" type="checkbox" defaultChecked={true}/>
-                            <span>NR</span>
-                            <br></br>
-                            <input id="r" type="checkbox" defaultChecked={true}/>
-                            <span>R</span>
-                            <br></br>
-                            <input id="PG-13" type="checkbox" defaultChecked={true}/>
-                            <span>PG-13</span>
-                            <br></br>
-                            <input id="PG" type="checkbox" defaultChecked={true}/>
-                            <span>PG</span>
-                            <br></br>
-                        </label>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Media Type" className="filter-head">
-                        <input id="movies" type="checkbox" defaultChecked={true}/>
-                        <span>Movies</span>
+                        <input id="Netflix" type="checkbox" defaultChecked={true}/>
+                        <span>Netflix</span>
                         <br></br>
-                        <input id="shows" type="checkbox" defaultChecked={true}/>
-                        <span>TV Shows</span>
-                    </Collapsible>
+                        <input id="amazon" type='checkbox' defaultChecked={true}/>
+                        <span>Amazon Prime</span>
+                        <br></br>
+                        <input id="hbo" type="checkbox" defaultChecked={true}/>
+                        <span>HBO</span>
+                        <br></br>
+                        <input id="hulu" type="checkbox" defaultChecked={true}/>
+                        <span>Hulu</span>
+                        <br></br>
+                    </label>
+                </Collapsible>
+                <br></br>
+                <Collapsible trigger="Maturity Ratings" className="filter-head">
+                <label className="checkbox-label">
+                        <input id="NR" type="checkbox" defaultChecked={true}/>
+                        <span>NR</span>
+                        <br></br>
+                        <input id="r" type="checkbox" defaultChecked={true}/>
+                        <span>R</span>
+                        <br></br>
+                        <input id="PG-13" type="checkbox" defaultChecked={true}/>
+                        <span>PG-13</span>
+                        <br></br>
+                        <input id="PG" type="checkbox" defaultChecked={true}/>
+                        <span>PG</span>
+                        <br></br>
+                    </label>
+                </Collapsible>
+                <br></br>
+                <Collapsible trigger="Media Type" className="filter-head">
+                <input id="movies" type="checkbox" defaultChecked={true} onChange={() => this.updateMediaAndApply(true, false)}/>
+                    <span>Movies</span>
                     <br></br>
-                </div>
+                    <input id="shows" type="checkbox" defaultChecked={true}  onChange={()=>this.updateMediaAndApply(false, true)}/>
+                    <span>TV Shows</span>
+                </Collapsible>
+                <br></br>
             </div>
-            <div className="movie-content">
-                <h1>Movie Collection</h1>
-                <div className="react-card">
-                   <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection='vertical'> 
-                   <div>
-                        this is front of card w/ Title
-                        <button onClick={this.handleClick}>click to flip</button>
-                   </div>
-                   <div>
-                       this has back of card with other info 
-                       <button onClick={this.handleClick}>click to flip</button>
-                   </div>
-                   </ReactCardFlip>
-                </div>
-                </div>
-            </div>
+        </div>
+        {/* {document.write(<h1>hello</h1>)} */}
+    </div>
         )
    } 
  }
