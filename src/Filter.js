@@ -159,12 +159,6 @@ export default class Filter extends React.Component {
         );
     }
 
-    handleRatingsChange(event, newValue) { 
-        // this.setState({ratingsValue: event.target.newValue});
-        // event.setValue(newValue); 
-        console.log(newValue);  
-    }
-
     //apply all of the filters the user has selected
     applyFilters() {
         let i = 0;
@@ -430,7 +424,6 @@ export default class Filter extends React.Component {
     return (
     <div className="main">
         <div className="nav-filters">
-            {/* <div className="sort"> */}
                 <h3 className='filter-header'>Filter by...</h3>
                 <hr></hr>
                 <Collapsible trigger="Vote Ratings" className="filter-head">
@@ -479,9 +472,7 @@ export default class Filter extends React.Component {
                     <span>TV Shows</span>
                 </Collapsible>
                 <br></br>
-            {/* </div> */}
         </div>
-        {/* {console.log(this.state.available_services)} */}
     </div>
         )
    } 
