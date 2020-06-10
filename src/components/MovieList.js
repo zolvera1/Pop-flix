@@ -1,14 +1,26 @@
-import React, { Component,defaultProps} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import {Card, CardDeck, Col} from 'react-bootstrap'
+import { CardDeck, Col } from 'react-bootstrap'
 import MovieCard from './MovieCard'
+import Spinner from './spinner'
+import LazyLoad from 'react-lazyload'
 const getMovies = (movies) => {
     return (
         <CardDeck>
             {
-                movies.map(movie => <Col key={movie.imdb_id}  sm={6} lg={6} md={4} > <MovieCard movie={movie} /> </Col>)
+                movies.map(movie =>
+                    <LazyLoad
+                        key={movie.imdb}
+                        height={100}
+                        offset={[-100, 100]}
+                        placeholder={<Spinner />}
+                    >
+                        <Col key={movie.imdb} sm={6} lg={6} md={4} >
+                            <MovieCard movie={movie} />
+                        </Col>
+                    </LazyLoad>)
             }
-       </CardDeck>
+        </CardDeck>
     );
 };
 

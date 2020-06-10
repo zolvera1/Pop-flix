@@ -5,13 +5,12 @@ import "./services/Search Bar Config/css/autoCompleteHome.css";
 import "./css/search.css";
 import "./App.css";
 import NavBar from "./components/navbar";
-import LazyLoad from "react-lazyload";
+
 import "./css/lazy.css";
-import Spinner from "./components/spinner";
-import Post from "./components/post";
+
 import Filter from "./Filter"
 import SearchBar from "./components/searchBar";
-
+import BodyLay from './components/BodyLay'
 var json = require('./services/API-data.json');
 
 
@@ -46,7 +45,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        {/* <img src={background} id="aqua" alt="hello"></img> */}
+
         <div className="header-container">
           <NavBar></NavBar>
           <div className="App">
@@ -66,16 +65,11 @@ class App extends Component {
         {console.log("print")}
         <h2>Movie Collection</h2>
         <div className="post-container">
-          {this.state.data.map(movie => (
-            <LazyLoad
-              key={movie.imdb}
-              height={100}
-              offset={[-100, 100]}
-              placeholder={<Spinner />}
-            >
-              <Post key={movie.imdb} {...movie} />
-            </LazyLoad>
-          ))}
+
+
+
+          <BodyLay values={this.state.data}></BodyLay>
+
         </div>
 
 
@@ -99,7 +93,7 @@ class App extends Component {
 
     this.setState({ data: jsonMovies })
 
-    // console.log(1, jsonMovies);
+
 
 
   }
