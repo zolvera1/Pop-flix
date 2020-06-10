@@ -103,7 +103,7 @@
 #autoComplete_list {
   position: absolute;
 
-  z-index: -1000;
+  z-index: 1000;
   padding: 0;
   margin-left: 30px;
   /* left: 0;
