@@ -86,7 +86,6 @@ export default class Filter extends React.Component {
             .then(response => response.json()) 
             .then(dataArray => {   
                 this.setState({ movies_all: dataArray });
-                this.setState({ movies_considered: dataArray });
                 this.setState({ movie_keys: dataArray.map(data => data.imdb)  });
                 this.setState({ movie_titles: dataArray.map(data => data.title)  });
                 this.setState({ movie_dates: dataArray.map(data => data.release_date)  });
@@ -100,14 +99,21 @@ export default class Filter extends React.Component {
 
                 //dynamically generate which platforms are available for streaming
                 let movie_plats = Filter.reduceArrOfArr(this.state.movie_platforms);
-                movie_plats.forEach(v => this.state.available_services.add(v));
+                movie_plats.forEach(v =>
+                    this.state.available_services.add(v) &&
+                    this.state.selected_services.add(v));
 
                 //dynamically generate which maturity ratings are available
                 let ratings = Filter.reduceArr(this.state.movie_ratings);
-                ratings.forEach(v => this.state.available_ratings.add(v));
+                ratings.forEach(v =>
+                    this.state.available_ratings.add(v) &&
+                    this.state.selected_ratings.add(v));
 
-                console.log(this.state.available_ratings);
-                console.log(this.state.available_services);
+                //consider all movies at first
+                let j;
+                for (j = 0; j < this.state.movies_all.length; j++) {
+                    this.state.movies_considered.push(j);
+                }
             }
         );
 
@@ -115,7 +121,7 @@ export default class Filter extends React.Component {
             .then(response => response.json())
             .then(dataArray => {
                 this.setState({ shows_all: dataArray });
-                this.setState({ shows_considered: dataArray });
+                //this.setState({ shows_considered: dataArray });
                 this.setState({ show_keys: dataArray.map(data => data.imdb)  });
                 this.setState({ show_titles: dataArray.map(data => data.title)  });
                 this.setState({ show_platforms: dataArray.map(data => data.streaming_platform)  });
@@ -127,11 +133,21 @@ export default class Filter extends React.Component {
 
                 //dynamically generate which platforms are available for streaming
                 let show_plats = Filter.reduceArrOfArr(this.state.show_platforms);
-                show_plats.forEach(v => this.state.available_services.add(v));
+                show_plats.forEach(v =>
+                    this.state.available_services.add(v) &&
+                    this.state.selected_services.add(v));
 
                 //dynamically generate which maturity ratings are available
                 let ratings = Filter.reduceArr(this.state.show_ratings);
-                ratings.forEach(v => this.state.available_ratings.add(v));
+                ratings.forEach(v =>
+                    this.state.available_ratings.add(v) &&
+                    this.state.selected_ratings.add(v));
+
+                //consider all shows at first
+                let j;
+                for (j = 0; j < this.state.shows_all.length; j++) {
+                    this.state.shows_considered.push(j);
+                }
             }
         );
     }
@@ -147,7 +163,7 @@ export default class Filter extends React.Component {
 
     //apply all of the filters the user has selected
     applyFilters() {
-        let i;
+        let i = 0;
         let movies_considered_reset = [];
         let shows_considered_reset = [];
 
@@ -159,14 +175,18 @@ export default class Filter extends React.Component {
             shows_considered_reset.push(i);
         }
 
-        this.setState({ movies_considered: movies_considered_reset });
-        this.setState({ shows_considered: shows_considered_reset });
+        this.setState({ movies_considered: movies_considered_reset }, async () => {
+            this.setState({ shows_considered: shows_considered_reset }, async () => {
+                //each of these methods reduce this.state.movies_considered and this.state.shows_considered
+                await this.scoreFilter();
+                await this.serviceFilter();
+                await this.mediaTypeFilter();
+                await this.maturityFilter();
 
-        //each of these methods reduce this.state.movies_considered and this.state.shows_considered
-        this.scoreFilter();
-        this.serviceFilter();
-        this.mediaTypeFilter();
-        this.maturityFilter();
+                console.log("movies: " + this.state.movies_considered);
+                console.log("shows: " + this.state.shows_considered);
+            });
+        });
     }
 
     //call this method after applyFilters to grab all movies that currently obey the filter rules
@@ -192,7 +212,7 @@ export default class Filter extends React.Component {
     }
 
     //ratings 0 through 10
-    scoreFilter() {
+    async scoreFilter() {
         let i;
         let reduced_watchables = [];
         let low_end = this.state.selected_average[0];
@@ -215,21 +235,24 @@ export default class Filter extends React.Component {
             }
         }
         this.setState({ shows_considered: reduced_watchables});
+
+        return 1;
     }
 
     //what platform is it available on
-    serviceFilter() {
+    async serviceFilter() {
         let i;
         let reduced_watchables = [];
+
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
-
             let services_available = this.state.movie_platforms[movie_index];
             let j;
             let movie_available = false;
             for (j = 0; j < services_available.length; j++) {
                 let a_platform = services_available[j];
-                if (this.state.selected_services.includes(a_platform)) {
+                //console.log(this.state.selected_services);
+                if (this.state.selected_services.has(a_platform)) {
                     movie_available = true;
                 }
             }
@@ -248,7 +271,7 @@ export default class Filter extends React.Component {
             let show_available = false;
             for (j = 0; j < services_available.length; j++) {
                 let a_platform = services_available[j];
-                if (this.state.selected_services.includes(a_platform)) {
+                if (this.state.selected_services.has(a_platform)) {
                     show_available = true;
                 }
             }
@@ -257,9 +280,11 @@ export default class Filter extends React.Component {
             }
         }
         this.setState({ shows_considered: reduced_watchables });
+
+        return 1;
     }
 
-    mediaTypeFilter() {
+    async mediaTypeFilter() {
         //whether we want movies and/or tv shows
         if (this.state.selected_media[0] === false) {
             this.setState({ movies_considered: [] });
@@ -267,15 +292,17 @@ export default class Filter extends React.Component {
         if (this.state.selected_media[1] === false) {
             this.setState({ shows_considered: [] });
         }
+
+        return 1;
     }
 
     //pg13, pg, r, nr
-    maturityFilter() {
+    async maturityFilter() {
         let i;
         let reduced_watchables = [];
         for (i = 0; i < this.state.movies_considered.length; i++) {
             let movie_index = this.state.movies_considered[i];
-            if (this.state.selected_ratings.includes(this.state.movie_ratings[movie_index])) {
+            if (this.state.selected_ratings.has(this.state.movie_ratings[movie_index])) {
                 reduced_watchables.push(movie_index);
             }
         }
@@ -284,11 +311,13 @@ export default class Filter extends React.Component {
 
         for (i = 0; i < this.state.shows_considered.length; i++) {
             let show_index = this.state.shows_considered[i];
-            if (this.state.selected_ratings.includes(this.state.show_ratings[show_index])) {
+            if (this.state.selected_ratings.has(this.state.show_ratings[show_index])) {
                 reduced_watchables.push(show_index);
             }
         }
         this.setState({ shows_considered: reduced_watchables });
+
+        return 1;
     }
 
     grabAvailableServices() {
@@ -301,8 +330,9 @@ export default class Filter extends React.Component {
 
     //call this method in the dual-ranged bar for movie/show scores
     updateScoreEndsAndApply(low_end, high_end) {
-        this.setState({ selected_average: [low_end, high_end] });
-        this.applyFilters();
+        this.setState({ selected_average: [low_end, high_end] }, () => {
+            this.applyFilters();
+        });
     }
 
     //call this after checking/un-checking Service Platforms, pass in array of all checked
@@ -320,8 +350,10 @@ export default class Filter extends React.Component {
 
     //call this method after checking/un-checking whether movies and/or shows are allowed
     updateMediaAndApply(movies_allowed, shows_allowed) {
-        this.setState({ selected_media: [movies_allowed, shows_allowed] });
-        this.applyFilters();
+        this.setState({ selected_media: [movies_allowed, shows_allowed] }, () => {
+            console.log(this.state.selected_media);
+            this.applyFilters();
+        });
     }
 
     updateRatingsAndApply(arrayOfSelectedRatings) {
@@ -348,78 +380,79 @@ export default class Filter extends React.Component {
         return (
             
             <div className="main">
-            <div style={{ height: "140px" }}></div> 
-            <div className="nav-filters">
-                <div className="sort">
-                    <h3>Filter by...</h3>
-                    <hr></hr>
-                    <Collapsible trigger="Vote Ratings" className="filter-head">
-                        <br></br><br></br>
-                        <div className='slider-box'>
-                            <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
-                            </div>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Streaming Services" className="filter-head">
-                        <label className="checkbox-label">
-                           <input id="Netflix" type="checkbox" defaultChecked={true}/>
-                            <span>Netflix</span>
-                            <br></br>
-                            <input id="amazon" type='checkbox' defaultChecked={true}/>
-                            <span>Amazon Prime</span>
-                            <br></br>
-                            <input id="hbo" type="checkbox" defaultChecked={true}/>
-                            <span>HBO</span>
-                            <br></br>
-                            <input id="hulu" type="checkbox" defaultChecked={true}/>
-                            <span>Hulu</span>
-                            <br></br>
-                        </label>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Maturity Ratings" className="filter-head">
-                    <label className="checkbox-label">
-                            <input id="NR" type="checkbox" defaultChecked={true}/>
-                            <span>NR</span>
-                            <br></br>
-                            <input id="r" type="checkbox" defaultChecked={true}/>
-                            <span>R</span>
-                            <br></br>
-                            <input id="PG-13" type="checkbox" defaultChecked={true}/>
-                            <span>PG-13</span>
-                            <br></br>
-                            <input id="PG" type="checkbox" defaultChecked={true}/>
-                            <span>PG</span>
-                            <br></br>
-                        </label>
-                    </Collapsible>
-                    <br></br>
-                    <Collapsible trigger="Media Type" className="filter-head">
-                        <input id="movies" type="checkbox" defaultChecked={true}/>
-                        <span>Movies</span>
+                <div style={{ height: "140px" }}>
+                </div>
+                <div className="nav-filters">
+                    <div className="sort">
+                        <h3>Filter by...</h3>
+                        <hr></hr>
+                        <Collapsible trigger="Vote Ratings" className="filter-head">
+                            <br></br><br></br>
+                            <div className='slider-box'>
+                                <Slider className="slider" min={0} max={10} defaultValue={[0,10]} onChange={() => this.handleRatingsChange} valueLabelDisplay="on"/>
+                                </div>
+                        </Collapsible>
                         <br></br>
-                        <input id="shows" type="checkbox" defaultChecked={true}/>
-                        <span>TV Shows</span>
-                    </Collapsible>
-                    <br></br>
+                        <Collapsible trigger="Streaming Services" className="filter-head">
+                            <label className="checkbox-label">
+                               <input id="Netflix" type="checkbox" defaultChecked={true}/>
+                                <span>Netflix</span>
+                                <br></br>
+                                <input id="amazon" type='checkbox' defaultChecked={true}/>
+                                <span>Amazon Prime</span>
+                                <br></br>
+                                <input id="hbo" type="checkbox" defaultChecked={true}/>
+                                <span>HBO</span>
+                                <br></br>
+                                <input id="hulu" type="checkbox" defaultChecked={true}/>
+                                <span>Hulu</span>
+                                <br></br>
+                            </label>
+                        </Collapsible>
+                        <br></br>
+                        <Collapsible trigger="Maturity Ratings" className="filter-head">
+                        <label className="checkbox-label">
+                                <input id="NR" type="checkbox" defaultChecked={true}/>
+                                <span>NR</span>
+                                <br></br>
+                                <input id="r" type="checkbox" defaultChecked={true}/>
+                                <span>R</span>
+                                <br></br>
+                                <input id="PG-13" type="checkbox" defaultChecked={true}/>
+                                <span>PG-13</span>
+                                <br></br>
+                                <input id="PG" type="checkbox" defaultChecked={true}/>
+                                <span>PG</span>
+                                <br></br>
+                            </label>
+                        </Collapsible>
+                        <br></br>
+                        <Collapsible trigger="Media Type" className="filter-head">
+                            <input id="movies" type="checkbox" defaultChecked={true} onChange={() => this.updateMediaAndApply(true, true)}/>
+                            <span>Movies</span>
+                            <br></br>
+                            <input id="shows" type="checkbox" defaultChecked={true}/>
+                            <span>TV Shows</span>
+                        </Collapsible>
+                        <br></br>
+                    </div>
                 </div>
-            </div>
-            <div className="movie-content">
-                <h1>Movie Collection</h1>
-                <div className="react-card">
-                   <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection='vertical'> 
-                   <div>
-                        this is front of card w/ Title
-                        <button onClick={this.handleClick}>click to flip</button>
-                   </div>
-                   <div>
-                       this has back of card with other info 
-                       <button onClick={this.handleClick}>click to flip</button>
-                   </div>
-                   </ReactCardFlip>
+                <div className="movie-content">
+                    <h1>Movie Collection</h1>
+                    <div className="react-card">
+                       <ReactCardFlip isFlipped={this.state.isFlipped} flipDirection='vertical'>
+                       <div>
+                            this is front of card w/ Title
+                            <button onClick={this.handleClick}>click to flip</button>
+                       </div>
+                       <div>
+                           this has back of card with other info
+                           <button onClick={this.handleClick}>click to flip</button>
+                       </div>
+                       </ReactCardFlip>
+                    </div>
                 </div>
                 </div>
-            </div>
         )
    } 
  }
