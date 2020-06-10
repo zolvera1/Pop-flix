@@ -159,9 +159,9 @@ export default class Filter extends React.Component {
         );
     }
 
-    handleRatingsChange(event) { 
-        this.setState({ratingsValue: event.target.ratingsValue}); 
-    }
+    // handleRatingsChange(event) { 
+    //     this.setState({ratingsValue: event.target.ratingsValue}); 
+    // }
 
     handleClick(e) { 
         e.preventDefault(); 
