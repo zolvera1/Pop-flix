@@ -106,6 +106,8 @@ export default function AutocompleteStartup(URL, arrayOfKeys) {
         .setAttribute("placeholder", selection);
       // Concole log autoComplete data feedback
 
+      document
+        .getElementById("search-btn").click();
       console.log(selection);
 
       console.log(feedback);
